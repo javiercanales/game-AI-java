@@ -85,7 +85,7 @@ public class Escenario extends JComponent implements Constantes {
                 g.drawString("Sed de Homero: " + jugador.getSedDeHomero() + " cervezas", 13, 3*MARGEN_BORDE_LARGO/4);
             }
             else{
-                g.drawString("Mmm, tengo sueño... hora de volver a casa", 13, 3*MARGEN_BORDE_LARGO/4);
+                g.drawString("Mmmmm, tengo sueño... hora de volver a casa", 13, 3*MARGEN_BORDE_LARGO/4);
             }
 
             //Timer-reloj del juego

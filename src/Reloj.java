@@ -31,5 +31,9 @@ public class Reloj extends TimerTask implements Constantes{
             segundos -= 1;
         }
         escenario.lienzo.repaint();
+        haceralgunawea();
+    }
+    public void haceralgunawea(){
+
     }
 }

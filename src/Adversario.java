@@ -123,14 +123,14 @@ public class Adversario extends TimerTask implements Constantes {
 
     public boolean sePuedeAvanzar(int x, int y) {
         if(escenario.celdas[x][y].tipo != OBSTACULO && escenario.celdas[x][y].tipo != ADVERSARIO
-                && escenario.celdas[x][y].tipo != CASA && escenario.celdas[x][y].tipo != JUGADOR) {
+                && escenario.celdas[x][y].tipo != CASA && escenario.celdas[x][y].tipo != JUGADOR && escenario.celdas[x][y].tipo != OBSTACULO2) {
             return true;
         }
         return false;
     }
     public boolean sePuedeAvanzar2(int x, int y) {
         if(escenario.celdas[x][y].tipo != OBSTACULO && escenario.celdas[x][y].tipo != ADVERSARIO
-                && escenario.celdas[x][y].tipo != CASA && escenario.celdas[x][y].tipo != FINAL) {
+                && escenario.celdas[x][y].tipo != CASA && escenario.celdas[x][y].tipo != FINAL && escenario.celdas[x][y].tipo != OBSTACULO2) {
             return true;
         }
         return false;

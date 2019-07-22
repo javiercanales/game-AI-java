@@ -3,6 +3,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Timer;
 
 /**
  * En esta clase se define la ventana de trabajo, sobre la cual
@@ -18,6 +19,7 @@ public class Lienzo extends Canvas implements Constantes {
 
     public Graphics graficoBuffer;
     public Image imagenBuffer;
+    public Timer lanzadorTareas;
     
     public Lienzo(){
         escenario = new Escenario(this);
@@ -43,6 +45,9 @@ public class Lienzo extends Canvas implements Constantes {
                 repaint();
             }
         });
+
+        lanzadorTareas = new Timer();
+        lanzadorTareas.scheduleAtFixedRate(escenario.jugador.inteligencia,0,1000);
     }
 
     /*

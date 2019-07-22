@@ -5,12 +5,14 @@ public class Jugador implements Constantes {
     public int y;
     public Escenario escenario;
     public int sedDeHomero;
+    public BusquedaAnchura inteligencia;
 
     public Jugador(int x, int y, Escenario escenario) {
         this.x = x;
         this.y = y;
         this.escenario = escenario;
         this.sedDeHomero = NUMERO_CERVEZAS;
+        this.inteligencia = new BusquedaAnchura(escenario);
     }
 
     public int getSedDeHomero(){
@@ -148,7 +150,7 @@ public class Jugador implements Constantes {
                 //Definir recompensa.
                 if(sedDeHomero > 0) {
                     sedDeHomero--;
-                }else if(sedDeHomero == 0) {
+                } else if(sedDeHomero == 0) {
                     JOptionPane.showMessageDialog(null, "OOOOOOAACCCCCCCCC... BRRRRRRR");
                     break;
                 }
@@ -180,7 +182,7 @@ public class Jugador implements Constantes {
 
     public boolean sePuedeAvanzar(int x, int y) {
         if(escenario.celdas[x][y].tipo != OBSTACULO && escenario.celdas[x][y].tipo != ADVERSARIO
-            && escenario.celdas[x][y].tipo != CASA) {
+            && escenario.celdas[x][y].tipo != CASA && escenario.celdas[x][y].tipo != OBSTACULO2) {
             return true;
         }
         return false;

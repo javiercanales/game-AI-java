@@ -1,3 +1,5 @@
+import javafx.util.Pair;
+
 import java.awt.*;
 import java.util.Timer;
 import javax.swing.*;
@@ -121,6 +123,11 @@ public class Escenario extends JComponent implements Constantes {
         for(int i=0; i<NUMERO_OBSTACULOS; i++) {
             establecerObstaculo(restriccionY);
         }
+        //Posiciones obstaculos 2 (bar de moe)
+        for(int i=0; i<NUMERO_OBSTACULOS_2; i++) {
+            establecerObstaculo2(restriccionY);
+        }
+
         //Posiciones adversarios
         for(int i=0; i<NUMERO_ADVERSARIOS; i++) {
             //Pares se mueven vertical, impares horizontal (1 y 1)
@@ -156,6 +163,18 @@ public class Escenario extends JComponent implements Constantes {
         }
         else{
             establecerObstaculo(restriccionY);
+        }
+    }
+    private void establecerObstaculo2(int restriccionY) {
+        int x,y;
+        x = randomValue(0, NUMERO_CELDAS_ANCHO-1);
+        y = randomValue(0, NUMERO_CELDAS_LARGO-1);
+        if(celdas[x][y].isDisponible() && y != restriccionY) {
+            //Se define un obstaculo
+            celdas[x][y].setObstaculo2();
+        }
+        else{
+            establecerObstaculo2(restriccionY);
         }
     }
 
@@ -231,5 +250,16 @@ public class Escenario extends JComponent implements Constantes {
 
     public void restarCerveza() {
         cervezasRestantes--;
+    }
+
+    public Pair<Integer,Integer> darCeldaTipo(char tipoC) {
+        Pair<Integer,Integer> celda=null;
+        for(int i=0; i < NUMERO_CELDAS_ANCHO ; i++)
+            for ( int j=0 ; j < NUMERO_CELDAS_LARGO; j++)
+                if ( celdas[i][j].tipo == tipoC ) {
+                    celda = new Pair(i,j);
+                    break;
+                }
+        return celda;
     }
 }

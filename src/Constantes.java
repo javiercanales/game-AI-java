@@ -26,6 +26,7 @@ public interface Constantes {
     public final char JUGADOR='J';
     public final char CAMINO='C';
     public final char OBSTACULO='O';
+    public final char OBSTACULO2='2';
     public final char ADVERSARIO='A';
     public final char RECOMPENSA='R';
     public final char FINAL='F';
@@ -35,7 +36,8 @@ public interface Constantes {
     public final int MARGEN_BORDE_LARGO =20;
 
     public final int NUMERO_OBSTACULOS=(NUMERO_CELDAS_ANCHO*NUMERO_CELDAS_LARGO)/5;
-    public final int NUMERO_ADVERSARIOS=(NUMERO_CELDAS_ANCHO*NUMERO_CELDAS_LARGO)/10;
+    public final int NUMERO_OBSTACULOS_2=(NUMERO_CELDAS_ANCHO*NUMERO_CELDAS_LARGO)/20;
+    public final int NUMERO_ADVERSARIOS=(NUMERO_CELDAS_ANCHO*NUMERO_CELDAS_LARGO)/30;
     public final int NUMERO_CERVEZAS=(NUMERO_CELDAS_ANCHO*NUMERO_CELDAS_LARGO)/30;
 
     public final Color COLOR_JUGADOR=Color.GREEN;

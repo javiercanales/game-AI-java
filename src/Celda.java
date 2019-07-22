@@ -12,7 +12,7 @@ public class Celda extends JComponent implements Constantes {
     public char tipo;
     public boolean celdaSelec;
 
-    public BufferedImage jugador, obstaculo, camino, adversario, recompensa, casa;
+    public BufferedImage jugador, obstaculo, obstaculo2, adversario, recompensa, casa;
 
     public int indexSprite;
     public BufferedImage sprites[], imagenSprites, imagenSpritesAdversario, spritesAdversario[];
@@ -29,6 +29,7 @@ public class Celda extends JComponent implements Constantes {
         try {
             jugador = ImageIO.read(new File("images/jugador.png"));
             obstaculo = ImageIO.read(new File("images/obstaculo.png"));
+            obstaculo2 = ImageIO.read(new File("images/obstaculo-2.png"));
             adversario = ImageIO.read(new File("images/adversario.png"));
             recompensa = ImageIO.read(new File("images/recompensa.png"));
             casa = ImageIO.read(new File("images/casa.png"));
@@ -70,6 +71,9 @@ public class Celda extends JComponent implements Constantes {
     public void setObstaculo() {
         tipo=OBSTACULO;
     }
+    public void setObstaculo2() {
+        tipo=OBSTACULO2;
+    }
     public void setAdversario() {
         tipo=ADVERSARIO;
     }
@@ -96,6 +100,9 @@ public class Celda extends JComponent implements Constantes {
                 break;
             case OBSTACULO:
                 g.drawImage(obstaculo,x,y,null);
+                break;
+            case OBSTACULO2:
+                g.drawImage(obstaculo2,x,y,null);
                 break;
             case RECOMPENSA:
                 g.drawImage(recompensa,x,y,null);

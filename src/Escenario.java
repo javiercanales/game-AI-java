@@ -262,4 +262,43 @@ public class Escenario extends JComponent implements Constantes {
                 }
         return celda;
     }
+    public Pair<Integer,Integer> darCeldaTipoMasCercano(char tipoC) {
+        Pair<Integer,Integer> celda = null;
+        Point punto = null;
+        for(int i=0; i < NUMERO_CELDAS_ANCHO ; i++)
+            for ( int j=0 ; j < NUMERO_CELDAS_LARGO; j++)
+                if ( celdas[i][j].tipo == tipoC ) {
+                    celda = new Pair(i,j);
+                    break;
+                }
+        return celda;
+    }
+    class ClosestPair {
+
+        double dist(Point p1, Point p2)
+        {
+            return Math.sqrt( (p1.x - p2.x)*(p1.x - p2.x) + (p1.y - p2.y)*(p1.y - p2.y) );
+        }
+
+        double BFClosestPair(Point P[], int n)
+        {
+            int i, j;
+            double min = Double.MAX_VALUE;
+            for (i = 0; i < n; i++)
+                for (j = i + 1; j < n; j++)
+                    if (dist(P[i], P[j]) < min)
+                        min = dist(P[i], P[j]);
+            puntosdistminima2(min, P, n);
+            return min;
+        }
+
+        void puntosdistminima2(double min, Point P[], int n)
+        {
+            int i, j;
+            for (i = 0; i < n; i++)
+                for (j = i + 1; j < n; j++)
+                    if (dist(P[i], P[j]) == min)
+                        System.out.println("Este par de puntos posee la distancia minima: (" + P[i].x +","+ P[i].y +") vs ("+ P[j].x +","+ P[j].y+")");
+        }
+    }
 }

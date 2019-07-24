@@ -9,7 +9,7 @@ public interface Constantes {
     public final int ANCHURA_ESCENARIO = widthScreen();
     public final int LARGO_ESCENARIO = heightScreen();
     //size of the cells
-    public final int PIXEL_CELDA=64;
+    public final int PIXEL_CELDA=128;
     //number of cells - width
     public final int NUMERO_CELDAS_ANCHO = celdasAncho()-1;
     //number of cells - height

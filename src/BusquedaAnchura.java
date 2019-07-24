@@ -29,7 +29,7 @@ public class BusquedaAnchura extends TimerTask implements Constantes{
         colaEstados.add(inicial);
         historial.add(inicial);
 
-        if ( inicial.equals(objetivo)) exito=true;
+        if ( inicial.equals(objetivo) ) exito=true;
 
         while ( !colaEstados.isEmpty() && !exito ){
 
@@ -114,11 +114,11 @@ public class BusquedaAnchura extends TimerTask implements Constantes{
 
         if ( e.x < NUMERO_CELDAS_ANCHO-1 ) {
             if ( sePuedeAvanzar(e.x+1, e.y) ) {
-                Estado derecha=new Estado(e.x+1,e.y,'R',e);
+                Estado derecha = new Estado(e.x+1, e.y,'R', e);
                 if ( !historial.contains(derecha)){
                     colaEstados.add(derecha);
 
-                    if ( derecha.equals(objetivo)) {
+                    if ( derecha.equals(objetivo) ) {
                         objetivo=derecha;
                         exito=true;
                     }
@@ -150,6 +150,14 @@ public class BusquedaAnchura extends TimerTask implements Constantes{
         return pasos.get(index_pasos-1);
 
     }
+
+    /**
+     * TIENDE A QUEDARSE ATRAPADO EN SÍ MISMO A VECES, AL CALCULAR LA DIRECCIÓN A RECORRER.
+     * ESTO PASA CUANDO NO LOGRA SELECCIONAR UNA DIRECCION DE MOVIMIENTO PORQUE NO SE PUEDE AVANZAR, POR "X" MOTIVO.
+     * LA SOLUCION PODRÍA PASAR POR EVITAR TODOS LOS CASOS QUE IMPIDEN NO AVANCE NUNCA, AÚN ASÍ HUBO UN FALLO LUEGO DE BASTANTE TIEMPO EN JUEGO.
+     * OTRA SOLUCIÓN PODRÍA SER LA BÚSQUEDA EFICIENTE DE LA CERVEZA MÁS CERCANA AL JUGADOR, AÚN ASÍ DEBE EVALUARSE OTROS CASOS DE ERROR.
+     * QUIZÁ, SÓLO QUIZÁ, CONTROLAR EL CASO EN QUE NO ENCONTRÓ MOVIMIENTO AÚN TERMINANDO LA COLA DE ESTADOS. ¿EVITAR EL INDEX SEA 1?, O ALGO PARECIDO.
+     */
 
     @Override
     public void run() {

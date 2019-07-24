@@ -42,8 +42,8 @@ public class Celda extends JComponent implements Constantes {
             //lo recorro separando las imagenes
             for (int i = 0; i < 1; i++) {
                 for (int j = 0; j < 4; j++) {
-                    sprites[(i * 4) + j] = imagenSprites.getSubimage(i * 64, j * 64,64, 64);
-                    spritesAdversario[(i * 4) + j] = imagenSpritesAdversario.getSubimage(i * 64, j * 64, 64, 64);
+                    sprites[(i * 4) + j] = imagenSprites.getSubimage(i * PIXEL_CELDA, j * PIXEL_CELDA,PIXEL_CELDA, PIXEL_CELDA);
+                    spritesAdversario[(i * 4) + j] = imagenSpritesAdversario.getSubimage(i * PIXEL_CELDA, j * PIXEL_CELDA, PIXEL_CELDA, PIXEL_CELDA);
                 }
             }
             //adversario = spritesAdversario[indexSprite];

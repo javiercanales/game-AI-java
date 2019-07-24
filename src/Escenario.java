@@ -114,27 +114,27 @@ public class Escenario extends JComponent implements Constantes {
         //Destino al cual debe llegar el jugador para terminar la partida
         //restriccionY se usa para limitar las celdas en la fila restriccionY
         //y que no sean obstaculos
-        int restriccionY = establecerFinal();
+        int restriccionCasa = establecerFinal();
 
         //Posicion inicial jugador
-        establecerJugador();
+        int restriccionJugador = establecerJugador();
 
         //Posiciones obstaculos
         for(int i=0; i<NUMERO_OBSTACULOS; i++) {
-            establecerObstaculo(restriccionY);
+            establecerObstaculo(restriccionCasa);
         }
         //Posiciones obstaculos 2 (bar de moe)
         for(int i=0; i<NUMERO_OBSTACULOS_2; i++) {
-            establecerObstaculo2(restriccionY);
+            establecerObstaculo2(restriccionCasa);
         }
 
         //Posiciones adversarios
         for(int i=0; i<NUMERO_ADVERSARIOS; i++) {
             //Pares se mueven vertical, impares horizontal (1 y 1)
             if(i%2 == 0) {
-                establecerAdversarios(true);
+                establecerAdversarios(true, restriccionJugador);
             }else{
-                establecerAdversarios(false);
+                establecerAdversarios(false, restriccionJugador);
             }
         }
         //Posiciones recompensas
@@ -143,7 +143,7 @@ public class Escenario extends JComponent implements Constantes {
         }
     }
 
-    private void establecerJugador() {
+    private int establecerJugador() {
         int x,y;
         x = randomValue(0, NUMERO_CELDAS_ANCHO-1);
         y = randomValue(0, NUMERO_CELDAS_LARGO-1);
@@ -151,6 +151,7 @@ public class Escenario extends JComponent implements Constantes {
             celdas[x][y].setJugador();
             jugador = new Jugador(x, y, this);
         }
+        return x;
     }
 
     private void establecerObstaculo(int restriccionY) {
@@ -178,18 +179,18 @@ public class Escenario extends JComponent implements Constantes {
         }
     }
 
-    private void establecerAdversarios(boolean movimientoVertical) {
+    private void establecerAdversarios(boolean movimientoVertical, int restriccionX) {
         int x,y;
         x = randomValue(0, NUMERO_CELDAS_ANCHO-1);
         y = randomValue(0, NUMERO_CELDAS_LARGO-1);
-        if(celdas[x][y].isDisponible()) {
+        if(celdas[x][y].isDisponible() && x != restriccionX) {
             celdas[x][y].setAdversario();
             //Se definen adversarios en cada celda numerada por contador del 0 al número de adversarios.
             adversarios[contadorAdversarios] = new Adversario(x, y, this, movimientoVertical);
             contadorAdversarios++;
         }
         else{
-            establecerAdversarios(movimientoVertical);
+            establecerAdversarios(movimientoVertical, restriccionX);
         }
     }
 
@@ -206,6 +207,9 @@ public class Escenario extends JComponent implements Constantes {
     }
 
     private int establecerFinal() {
+        /**
+         * FALTA LA CONDICION QUE IMPIDA OBSTACULOS EN LA ENTRADA A LA CASA.
+         */
         //Casa de la familia Simpson
         //int x=NUMERO_CELDAS_ANCHO/2, y=NUMERO_CELDAS_LARGO/2;
         int x = randomValue(2, 2*NUMERO_CELDAS_ANCHO/3);
@@ -217,7 +221,7 @@ public class Escenario extends JComponent implements Constantes {
         celdas[x+2][y].setObstaculo();
         celdas[x+2][y+1].setObstaculo();
 
-        return y+2;
+        return y+2; //dos celdas de distancia a la casa, sin obstáculos
     }
 
     public void moverAdversario() {

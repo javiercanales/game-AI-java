@@ -110,6 +110,11 @@ public class Adversario extends TimerTask implements Constantes {
                 //Barney bebió una cerveza!
                 System.out.println("Barney se tomó una!");
                 escenario.restarCerveza();
+
+                //Eliminamos objetivo consumido
+                int index = escenario.buscarObjetivo(x, y);
+                escenario.jugador.inteligencia.destinos.remove(index);
+
                 System.out.println("Quedan " + escenario.cervezasRestantes + " cervezas.");
                 break;
             case FINAL:

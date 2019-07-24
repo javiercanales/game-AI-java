@@ -1,6 +1,7 @@
 import javafx.util.Pair;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Timer;
 import javax.swing.*;
 
@@ -17,9 +18,14 @@ public class Escenario extends JComponent implements Constantes {
     public Timer lanzadorTareas;
     public Reloj reloj;
     public Timer relojTiempoJuego;
+
+    public ArrayList<Estado> destinos;
+    public Estado destinoFinal;
     
     public Escenario(Lienzo lienzo) {
         this.lienzo=lienzo;
+        destinos=new ArrayList<>();
+        destinoFinal=null;
 
         celdas = new Celda[NUMERO_CELDAS_ANCHO][NUMERO_CELDAS_LARGO];
         //inicializar el array de celdas
@@ -40,9 +46,12 @@ public class Escenario extends JComponent implements Constantes {
                 synchronized (this) {
                     if(cervezasRestantes == 0) {
                         System.out.println("Reestableciendo cervezas... Sed: numero de cervezas menos las que llevaba --- ");
+
                         for(int i=0; i< NUMERO_CERVEZAS; i++) {
                             establecerRecompensas();
                         }
+                        jugador.inteligencia.destinos = destinos; //nuevos destinos
+
                         nuevaSed = NUMERO_CERVEZAS/2 + jugador.getSedDeHomero();
                         if(nuevaSed > NUMERO_CERVEZAS) nuevaSed = NUMERO_CERVEZAS;
                         cervezasRestantes = NUMERO_CERVEZAS;
@@ -111,13 +120,13 @@ public class Escenario extends JComponent implements Constantes {
     }
 
     private void construirEscenario() {
+        //Posicion inicial jugador
+        int restriccionJugador = establecerJugador();
+
         //Destino al cual debe llegar el jugador para terminar la partida
         //restriccionY se usa para limitar las celdas en la fila restriccionY
         //y que no sean obstaculos
         int restriccionCasa = establecerFinal();
-
-        //Posicion inicial jugador
-        int restriccionJugador = establecerJugador();
 
         //Posiciones obstaculos
         for(int i=0; i<NUMERO_OBSTACULOS; i++) {
@@ -145,8 +154,8 @@ public class Escenario extends JComponent implements Constantes {
 
     private int establecerJugador() {
         int x,y;
-        x = randomValue(0, NUMERO_CELDAS_ANCHO-1);
-        y = randomValue(0, NUMERO_CELDAS_LARGO-1);
+        x = 0; //randomValue(0, NUMERO_CELDAS_ANCHO-1);
+        y = 0; //randomValue(0, NUMERO_CELDAS_LARGO-1);
         if(celdas[x][y].isDisponible()) {
             celdas[x][y].setJugador();
             jugador = new Jugador(x, y, this);
@@ -200,6 +209,7 @@ public class Escenario extends JComponent implements Constantes {
         y = randomValue(0, NUMERO_CELDAS_LARGO-1);
         if(celdas[x][y].isDisponible()) {
             celdas[x][y].setRecompensa();
+            destinos.add(new Estado(x, y, 'N', null));
         }
         else{
             establecerRecompensas();
@@ -207,20 +217,24 @@ public class Escenario extends JComponent implements Constantes {
     }
 
     private int establecerFinal() {
-        /**
-         * FALTA LA CONDICION QUE IMPIDA OBSTACULOS EN LA ENTRADA A LA CASA.
-         */
         //Casa de la familia Simpson
         //int x=NUMERO_CELDAS_ANCHO/2, y=NUMERO_CELDAS_LARGO/2;
         int x = randomValue(2, 2*NUMERO_CELDAS_ANCHO/3);
         int y = randomValue(2, 2*NUMERO_CELDAS_LARGO/3);
-        celdas[x][y].setCasa();
-        celdas[x][y+1].setObstaculo();
-        celdas[x+1][y].setObstaculo();
-        celdas[x+1][y+1].setFinal();
-        celdas[x+2][y].setObstaculo();
-        celdas[x+2][y+1].setObstaculo();
 
+        if(x != 0 && y != 0) {
+            celdas[x][y].setCasa();
+            celdas[x][y+1].setObstaculo();
+            celdas[x+1][y].setObstaculo();
+
+            celdas[x+1][y+1].setFinal();
+            destinoFinal = new Estado(x+1, y+1, 'N', null);
+
+            celdas[x+2][y].setObstaculo();
+            celdas[x+2][y+1].setObstaculo();
+        } else {
+            establecerFinal();
+        }
         return y+2; //dos celdas de distancia a la casa, sin obstáculos
     }
 
@@ -266,6 +280,16 @@ public class Escenario extends JComponent implements Constantes {
                 }
         return celda;
     }
+
+    public int buscarObjetivo(int x, int y) {
+        for(int i=0; i < destinos.size(); i++) {
+            if (destinos.get(i).x == x && destinos.get(i).y == y) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public Pair<Integer,Integer> darCeldaTipoMasCercano(char tipoC) {
         Pair<Integer,Integer> celda = null;
         Point punto = null;

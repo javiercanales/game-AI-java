@@ -12,7 +12,7 @@ public class Jugador implements Constantes {
         this.y = y;
         this.escenario = escenario;
         this.sedDeHomero = NUMERO_CERVEZAS;
-        this.inteligencia = new BusquedaAnchura(escenario);
+        this.inteligencia = new BusquedaAnchura(escenario, this);
     }
 
     public int getSedDeHomero(){

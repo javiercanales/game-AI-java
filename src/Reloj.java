@@ -3,13 +3,14 @@ import java.util.TimerTask;
 
 public class Reloj extends TimerTask implements Constantes{
     public Escenario escenario;
-    public int minutos = 10;
-    public int segundos = 10;
+    public int minutos = 2;
+    public int segundos = 30;
     public int extraSegs = 20;
 
     public Reloj(Escenario escenario) {
         this.escenario = escenario;
     }
+
     public void setTiempoExtra(){
         if(segundos + extraSegs >= 60) {
             minutos++;

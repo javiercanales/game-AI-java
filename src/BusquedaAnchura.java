@@ -1,9 +1,13 @@
 import java.util.ArrayList;
 import java.util.TimerTask;
 
-public class BusquedaAnchura extends TimerTask implements Constantes{
+public class BusquedaAnchura extends TimerTask implements Constantes {
 
     public Escenario escenario;
+    public Jugador jugador;
+    public ArrayList<Estado> destinos;
+    public Estado destinoFinal;
+    public boolean parar;
     public ArrayList<Estado> colaEstados;
     public ArrayList<Estado> historial;
     public ArrayList<Character> pasos;
@@ -13,7 +17,7 @@ public class BusquedaAnchura extends TimerTask implements Constantes{
     public Estado temp;
     public boolean exito;
 
-    public BusquedaAnchura(Escenario escenario) {
+    public BusquedaAnchura(Escenario escenario, Jugador jugador) {
 
         this.escenario=escenario;
         colaEstados=new ArrayList<>();
@@ -21,13 +25,18 @@ public class BusquedaAnchura extends TimerTask implements Constantes{
         pasos=new ArrayList<>();
         index_pasos=0;
         exito=false;
+        this.jugador=jugador;
+        destinos=new ArrayList<>();
+        parar=false;
+        destinoFinal=null;
     }
 
-    public void buscar(int x1,int y1,int x2,int y2) {
-        inicial = new Estado(x1,y1,'N',null);
-        objetivo = new Estado(x2,y2,'P',null);
+    public boolean buscar(Estado inicial, Estado objetivo) {
+        index_pasos = 0;
         colaEstados.add(inicial);
         historial.add(inicial);
+        this.objetivo=objetivo;
+        exito=false;
 
         if ( inicial.equals(objetivo) ) exito=true;
 
@@ -43,8 +52,15 @@ public class BusquedaAnchura extends TimerTask implements Constantes{
             moverDerecha(temp);
         }
 
-        if ( exito ) System.out.println("Ruta calculada");
-        else System.out.println("La ruta no pudo calcularse");
+        if ( exito ) {
+            System.out.println("Ruta calculada");
+            this.calcularRuta();
+            return true;
+        }
+        else {
+            System.out.println("La ruta no pudo calcularse");
+            return false;
+        }
 
     }
 
@@ -138,7 +154,7 @@ public class BusquedaAnchura extends TimerTask implements Constantes{
     public void calcularRuta() {
         Estado predecesor = objetivo;
         do {
-            pasos.add(predecesor.oper);
+            pasos.add(0, predecesor.oper);
             predecesor = predecesor.predecesor;
         } while ( predecesor != null );
 
@@ -152,50 +168,82 @@ public class BusquedaAnchura extends TimerTask implements Constantes{
     }
 
     /**
-     * TIENDE A QUEDARSE ATRAPADO EN SÍ MISMO A VECES, AL CALCULAR LA DIRECCIÓN A RECORRER.
-     * ESTO PASA CUANDO NO LOGRA SELECCIONAR UNA DIRECCION DE MOVIMIENTO PORQUE NO SE PUEDE AVANZAR, POR "X" MOTIVO.
-     * LA SOLUCION PODRÍA PASAR POR EVITAR TODOS LOS CASOS QUE IMPIDEN NO AVANCE NUNCA, AÚN ASÍ HUBO UN FALLO LUEGO DE BASTANTE TIEMPO EN JUEGO.
-     * OTRA SOLUCIÓN PODRÍA SER LA BÚSQUEDA EFICIENTE DE LA CERVEZA MÁS CERCANA AL JUGADOR, AÚN ASÍ DEBE EVALUARSE OTROS CASOS DE ERROR.
-     * QUIZÁ, SÓLO QUIZÁ, CONTROLAR EL CASO EN QUE NO ENCONTRÓ MOVIMIENTO AÚN TERMINANDO LA COLA DE ESTADOS. ¿EVITAR EL INDEX SEA 1?, O ALGO PARECIDO.
+     * PENDIENTE: Se debe implementar restricciones para que no queden encerrados los personajes o recompensas.
+     * Por ejemplo, evitar posiciones en los obstáculos que sean (x,y) v/s (x+1,y+1) v/s (x+2,y), lo que claramente
+     * produce un espacio encerrado.
      */
 
     @Override
     public void run() {
-        escenario.jugador.inteligencia.resetear();
-        int xJ, yJ, xR, yR;
+        if( !parar ) {
+            escenario.jugador.inteligencia.resetear();
+        }
+        Estado subinicial, subobjetivo;
+        boolean resultado;
 
         if(escenario.jugador.getSedDeHomero() == 0) {       //Logrado, debe buscar el final
-            xJ = escenario.darCeldaTipo('J').getKey();
-            yJ = escenario.darCeldaTipo('J').getValue();
-            xR = escenario.darCeldaTipo('F').getKey();
-            yR = escenario.darCeldaTipo('F').getValue();
-        } else {                                            //Aún con sed, debe buscar + cervezas
-            xJ = escenario.darCeldaTipo('J').getKey();
-            yJ = escenario.darCeldaTipo('J').getValue();
-            xR = escenario.darCeldaTipoMasCercano('R').getKey();
-            yR = escenario.darCeldaTipoMasCercano('R').getValue();
+            do { //el estado inicial es donde estoy
+                subinicial=new Estado(jugador.x,jugador.y,'N',null);
+                //el estado final del juego
+                subobjetivo=destinoFinal;
+
+                System.out.println("Busqueda de jugador en (" + subinicial.x + "," + subinicial.y + ")");
+                System.out.println("hacia la posicion FINAL (" + subobjetivo.x + "," + subobjetivo.y + ")");
+                //busco ruta
+                resultado=this.buscar(subinicial,subobjetivo);
+
+                if ( !subinicial.equals(subobjetivo) && !resultado)
+                    resetear();
+            } while (!resultado && !destinos.isEmpty());
+        } else {
+            do { //el estado inicial es donde estoy
+                subinicial=new Estado(jugador.x,jugador.y,'N',null);
+                //el estado final es a donde quiero ir
+                subobjetivo=destinos.get(0);
+
+                System.out.println("Busqueda de jugador en (" + subinicial.x + "," + subinicial.y + ")");
+                System.out.println("hacia la posicion (" + subobjetivo.x + "," + subobjetivo.y + ")");
+                //busco ruta
+                resultado=this.buscar(subinicial,subobjetivo);
+                if ( subinicial.equals(subobjetivo) )
+                    destinos.remove(subobjetivo);
+                else {
+                    if ( !resultado ) {
+                        resetear();
+                    }
+                }
+                if ( destinos.isEmpty() ) {
+                    System.out.println("Quiza se acabo a donde ir");
+                    try {
+                        Thread.sleep(2000);   //para dar tiempo a un posible reseteo de recompensas
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if ( destinos.isEmpty() ) {
+                        System.out.println("Definitivamente se acabo a donde ir");
+                        this.cancel();
+                    }
+                }
+            } while (!resultado && !destinos.isEmpty());
         }
 
-        System.out.println("Busqueda de jugador en (" + xJ + "," + yJ + ")");
-        System.out.println("hacia la posicion (" + xR + "," + yR + ")");
+        if(pasos.size() > 1) {
+            switch (pasos.get(1)) {
+                case 'D': System.out.println("Paso a dar: Abajo");     break;
+                case 'U': System.out.println("Paso a dar: Arriba");    break;
+                case 'R': System.out.println("Paso a dar: Derecha");   break;
+                case 'L': System.out.println("Paso a dar: Izquierda"); break;
+            }
 
-        escenario.jugador.inteligencia.buscar(xJ,yJ,xR,yR);
-        escenario.jugador.inteligencia.calcularRuta();
-
-        switch (darMovimiento()) {
-            case 'D': System.out.println("Paso a dar: Abajo");     break;
-            case 'U': System.out.println("Paso a dar: Arriba");    break;
-            case 'R': System.out.println("Paso a dar: Derecha");   break;
-            case 'L': System.out.println("Paso a dar: Izquierda"); break;
+            switch (pasos.get(1)) {
+                case 'D': escenario.jugador.moverCeldaAbajo();     break;
+                case 'U': escenario.jugador.moverCeldaArriba();    break;
+                case 'R': escenario.jugador.moverCeldaDerecha();   break;
+                case 'L': escenario.jugador.moverCeldaIzquierda(); break;
+            }
+            escenario.lienzo.repaint();
         }
 
-        switch (darMovimiento()) {
-            case 'D': escenario.jugador.moverCeldaAbajo();     break;
-            case 'U': escenario.jugador.moverCeldaArriba();    break;
-            case 'R': escenario.jugador.moverCeldaDerecha();   break;
-            case 'L': escenario.jugador.moverCeldaIzquierda(); break;
-        }
-        escenario.lienzo.repaint();
         System.out.println("-----------------------------------");
     }
 }

@@ -3,6 +3,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.Timer;
 
 /**
@@ -20,9 +21,10 @@ public class Lienzo extends Canvas implements Constantes {
     public Graphics graficoBuffer;
     public Image imagenBuffer;
     public Timer lanzadorTareas;
-    
+
     public Lienzo(){
         escenario = new Escenario(this);
+
         this.setSize(ANCHURA_ESCENARIO,LARGO_ESCENARIO);
         this.setBackground(Color.yellow);
 
@@ -45,6 +47,9 @@ public class Lienzo extends Canvas implements Constantes {
                 repaint();
             }
         });
+
+        escenario.jugador.inteligencia.destinoFinal = escenario.destinoFinal;
+        escenario.jugador.inteligencia.destinos = escenario.destinos;
 
         lanzadorTareas = new Timer();
         lanzadorTareas.scheduleAtFixedRate(escenario.jugador.inteligencia,0,1000);

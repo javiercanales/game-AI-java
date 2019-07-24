@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 public interface Constantes {
@@ -35,8 +36,8 @@ public interface Constantes {
     public final int FACTOR_ANCHO=3;
     public final int MARGEN_BORDE_LARGO =20;
 
-    public final int NUMERO_OBSTACULOS=(NUMERO_CELDAS_ANCHO*NUMERO_CELDAS_LARGO)/5;
-    public final int NUMERO_OBSTACULOS_2=(NUMERO_CELDAS_ANCHO*NUMERO_CELDAS_LARGO)/20;
+    public final int NUMERO_OBSTACULOS=(NUMERO_CELDAS_ANCHO*NUMERO_CELDAS_LARGO)/8;
+    public final int NUMERO_OBSTACULOS_2=(NUMERO_CELDAS_ANCHO*NUMERO_CELDAS_LARGO)/15;
     public final int NUMERO_ADVERSARIOS=(NUMERO_CELDAS_ANCHO*NUMERO_CELDAS_LARGO)/30;
     public final int NUMERO_CERVEZAS=(NUMERO_CELDAS_ANCHO*NUMERO_CELDAS_LARGO)/30;
 

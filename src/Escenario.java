@@ -27,6 +27,7 @@ public class Escenario extends JComponent implements Constantes {
 
     public Image duffcita;
     public Image relojito;
+    public Image nubecita;
     
     public Escenario(Lienzo lienzo) {
         this.lienzo=lienzo;
@@ -47,6 +48,7 @@ public class Escenario extends JComponent implements Constantes {
         //Construccion del escenario y sus entidades
         construirEscenario();
 
+        //iconos pequeños para la barra
         try {
             duffcita = ImageIO.read(new File("images/recompensa.png"));
         } catch (IOException e) {
@@ -59,6 +61,12 @@ public class Escenario extends JComponent implements Constantes {
             e.printStackTrace();
         }
         relojito = relojito.getScaledInstance(18, 20, Image.SCALE_DEFAULT);
+        try {
+            nubecita = ImageIO.read(new File("images/nube.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        nubecita = nubecita.getScaledInstance(18, 20, Image.SCALE_DEFAULT);
 
         hilo = new Thread(() -> {
             while(jugador.getSedDeHomero() != 0) {
@@ -110,15 +118,30 @@ public class Escenario extends JComponent implements Constantes {
         g.setColor(Color.BLUE);
         g.setFont(new Font("Verdana", Font.BOLD + Font.ITALIC, 15));
 
+        construccionBarraJuego(g);
+    }
+
+    //para evitar que pestañee al mover el jugador (o cambiar algo gráfico en general)
+    @Override
+    public void update(Graphics g) {
+        //era paint(g); pero lo cambie... igual rara volá
+        paintComponent(g);
+    }
+
+    private void construccionBarraJuego(Graphics g) {
+        //iconos pequeños de la barra
         g.drawImage(duffcita, 70, 2, null);
         g.drawImage(relojito, 1*ANCHURA_ESCENARIO/9, 2, null);
+        g.drawImage(nubecita, (2*ANCHURA_ESCENARIO/8) - 25, 2, null);
 
-        if(jugador != null && reloj != null) {
+        if(jugador != null && reloj != null) {     //para que al iniciar el programa no ocurran errores de nullpointer
             //Marcador sed de Homero
             g.drawString("Sed de    x " + jugador.getSedDeHomero(), 8, 3* MARGEN_LARGO_BARRA /4);
 
             if(jugador.getSedDeHomero() == 0) {
-                g.drawString("Mmmmm brrrrrrp, ya no tengo más sed...", 2*ANCHURA_ESCENARIO/8, 3* MARGEN_LARGO_BARRA /4);
+                g.drawString("{ Mmmmm brrrrrrp, ya no tengo más sed... }", 2*ANCHURA_ESCENARIO/8, 3* MARGEN_LARGO_BARRA /4);
+            } else {
+                g.drawString("{ Mmmmm... cerveza... }", 2*ANCHURA_ESCENARIO/8, 3* MARGEN_LARGO_BARRA /4);
             }
 
             //Timer-reloj del juego
@@ -132,13 +155,6 @@ public class Escenario extends JComponent implements Constantes {
                 g.drawString("0"+reloj.minutos+":0"+reloj.segundos, 1*ANCHURA_ESCENARIO/8, 3* MARGEN_LARGO_BARRA /4);
             }
         }
-    }
-
-    //para evitar que pestañee al mover el jugador (o cambiar algo gráfico en general)
-    @Override
-    public void update(Graphics g) {
-        //era paint(g); pero lo cambie... igual rara volá
-        paintComponent(g);
     }
 
     private void construirEscenario() {

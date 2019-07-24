@@ -22,7 +22,7 @@ public class Reloj extends TimerTask implements Constantes{
     @Override
     public void run() {
         if(segundos == 0 && minutos == 0) {
-            JOptionPane.showMessageDialog(null, "Se acabo el tiempo!!!!!!");
+            JOptionPane.showMessageDialog(null, "PERDEDOR! Se acabo el tiempo!!!!!!");
             System.exit(0);
         }
         else if(segundos == 0) {

@@ -1,9 +1,11 @@
+import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
 import java.util.Timer;
 
 /**
@@ -16,13 +18,21 @@ import java.util.Timer;
 public class Lienzo extends Canvas implements Constantes {
    
     public Escenario escenario;
-    //public Image fondo;
+    public Image fondo;
 
     public Graphics graficoBuffer;
     public Image imagenBuffer;
     public Timer lanzadorTareas;
 
-    public Lienzo(){
+    public Lienzo() {
+        try {
+            fondo = ImageIO.read(new File("images/fondo.png"));
+            fondo = fondo.getScaledInstance(getAncho(), getLargo(), Image.SCALE_SMOOTH);
+            System.out.println("Leido ---------------------");
+        } catch (IOException error) {
+            System.out.println("Error al cargar el fondo!!!");
+        }
+
         escenario = new Escenario(this);
 
         this.setSize(ANCHURA_ESCENARIO,LARGO_ESCENARIO);
@@ -73,7 +83,7 @@ public class Lienzo extends Canvas implements Constantes {
         //volcamos color de fondo e imagen en el nuevo buffer grafico
         graficoBuffer.setColor(getBackground());
         graficoBuffer.fillRect(0,0,this.getWidth(),this.getHeight());
-        //graficoBuffer.drawImage(fondo, 0, MARGEN_BORDE_LARGO, null);
+        graficoBuffer.drawImage(fondo, 0, MARGEN_LARGO_BARRA, null);
         escenario.update(graficoBuffer);
         //pintamos la imagen previa
         g.drawImage(imagenBuffer, 0, 0, null);
@@ -82,7 +92,7 @@ public class Lienzo extends Canvas implements Constantes {
     //metodo paint para pintar el escenario
     @Override
     public void paint(Graphics g) {
-        //g.drawImage(fondo, 0, MARGEN_BORDE_LARGO, null);
+        //g.drawImage(fondo, 0, MARGEN_LARGO_BARRA, null);
         escenario.paintComponent(g);
     }
 

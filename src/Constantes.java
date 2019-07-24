@@ -34,7 +34,7 @@ public interface Constantes {
     public final char CASA='H';
 
     public final int FACTOR_ANCHO=3;
-    public final int MARGEN_BORDE_LARGO =20;
+    public final int MARGEN_LARGO_BARRA =23;
 
     public final int NUMERO_OBSTACULOS=(NUMERO_CELDAS_ANCHO*NUMERO_CELDAS_LARGO)/8;
     public final int NUMERO_OBSTACULOS_2=(NUMERO_CELDAS_ANCHO*NUMERO_CELDAS_LARGO)/15;

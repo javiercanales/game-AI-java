@@ -1,8 +1,11 @@
 import javafx.util.Pair;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Timer;
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class Escenario extends JComponent implements Constantes {
@@ -21,6 +24,9 @@ public class Escenario extends JComponent implements Constantes {
 
     public ArrayList<Estado> destinos;
     public Estado destinoFinal;
+
+    public Image duffcita;
+    public Image relojito;
     
     public Escenario(Lienzo lienzo) {
         this.lienzo=lienzo;
@@ -31,7 +37,7 @@ public class Escenario extends JComponent implements Constantes {
         //inicializar el array de celdas
         for(int i=0; i < NUMERO_CELDAS_ANCHO; i++) {
            for (int j = 0; j < NUMERO_CELDAS_LARGO; j++) {
-               celdas[i][j]=new Celda(i+(i*PIXEL_CELDA), MARGEN_BORDE_LARGO +j+(j*PIXEL_CELDA));
+               celdas[i][j]=new Celda(i+(i*PIXEL_CELDA), MARGEN_LARGO_BARRA +j+(j*PIXEL_CELDA));
            }
         }
         adversarios = new Adversario[NUMERO_ADVERSARIOS];
@@ -40,6 +46,19 @@ public class Escenario extends JComponent implements Constantes {
 
         //Construccion del escenario y sus entidades
         construirEscenario();
+
+        try {
+            duffcita = ImageIO.read(new File("images/recompensa.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        duffcita = duffcita.getScaledInstance(10, 20, Image.SCALE_DEFAULT);
+        try {
+            relojito = ImageIO.read(new File("images/reloj.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        relojito = relojito.getScaledInstance(18, 20, Image.SCALE_DEFAULT);
 
         hilo = new Thread(() -> {
             while(jugador.getSedDeHomero() != 0) {
@@ -79,35 +98,38 @@ public class Escenario extends JComponent implements Constantes {
     
     @Override
     public void paintComponent(Graphics g) {
+        g.drawImage(lienzo.fondo, 0, MARGEN_LARGO_BARRA, null);
+
         for(int i=0; i < NUMERO_CELDAS_ANCHO ; i++) 
             for ( int j=0 ; j < NUMERO_CELDAS_LARGO; j++) 
               celdas[i][j].paintComponent(g);
-
         //Para pintar un rectangulo que borre el marcador anterior
         g.setColor(Color.yellow);
-        g.fillRect(0, 0, ANCHURA_ESCENARIO, MARGEN_BORDE_LARGO);
+        g.fillRect(0, 0, ANCHURA_ESCENARIO, MARGEN_LARGO_BARRA);
         //Para grabar el nuevo marcador
         g.setColor(Color.BLUE);
         g.setFont(new Font("Verdana", Font.BOLD + Font.ITALIC, 15));
 
+        g.drawImage(duffcita, 70, 2, null);
+        g.drawImage(relojito, 1*ANCHURA_ESCENARIO/9, 2, null);
+
         if(jugador != null && reloj != null) {
             //Marcador sed de Homero
-            if(jugador.getSedDeHomero() != 0) {
-                g.drawString("Sed de Homero: " + jugador.getSedDeHomero() + " cervezas", 13, 3*MARGEN_BORDE_LARGO/4);
-            }
-            else{
-                g.drawString("Mmmmm, tengo sueño... hora de volver a casa", 13, 3*MARGEN_BORDE_LARGO/4);
+            g.drawString("Sed de    x " + jugador.getSedDeHomero(), 8, 3* MARGEN_LARGO_BARRA /4);
+
+            if(jugador.getSedDeHomero() == 0) {
+                g.drawString("Mmmmm brrrrrrp, ya no tengo más sed...", 2*ANCHURA_ESCENARIO/8, 3* MARGEN_LARGO_BARRA /4);
             }
 
             //Timer-reloj del juego
-            if(reloj.minutos>=10 && reloj.segundos>=10){
-                g.drawString(reloj.minutos+":"+reloj.segundos, 7*ANCHURA_ESCENARIO/8, 3*MARGEN_BORDE_LARGO/4);
-            }else if(reloj.minutos>9){
-                g.drawString(reloj.minutos+":0"+reloj.segundos, 7*ANCHURA_ESCENARIO/8, 3*MARGEN_BORDE_LARGO/4);
-            }else if(reloj.segundos>9){
-                g.drawString("0"+reloj.minutos+":"+reloj.segundos, 7*ANCHURA_ESCENARIO/8, 3*MARGEN_BORDE_LARGO/4);
-            }else{
-                g.drawString("Mmm cerveza... SED... 0"+reloj.minutos+":0"+reloj.segundos, 5*ANCHURA_ESCENARIO/6, 3*MARGEN_BORDE_LARGO/4);
+            if( reloj.minutos>=10 && reloj.segundos>=10 ) {
+                g.drawString(reloj.minutos+":"+reloj.segundos, 1*ANCHURA_ESCENARIO/8, 3* MARGEN_LARGO_BARRA /4);
+            } else if( reloj.minutos>9 ) {
+                g.drawString(reloj.minutos+":0"+reloj.segundos, 1*ANCHURA_ESCENARIO/8, 3* MARGEN_LARGO_BARRA /4);
+            } else if( reloj.segundos>9 ) {
+                g.drawString("0"+reloj.minutos+":"+reloj.segundos, 1*ANCHURA_ESCENARIO/8, 3* MARGEN_LARGO_BARRA /4);
+            } else {
+                g.drawString("0"+reloj.minutos+":0"+reloj.segundos, 1*ANCHURA_ESCENARIO/8, 3* MARGEN_LARGO_BARRA /4);
             }
         }
     }

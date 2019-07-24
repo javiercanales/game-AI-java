@@ -150,31 +150,16 @@ public class Jugador implements Constantes {
                 //Definir recompensa.
                 if(sedDeHomero > 0) {
                     sedDeHomero--;
-                } else if(sedDeHomero == 0) {
-                    JOptionPane.showMessageDialog(null, "OOOOOOAACCCCCCCCC... BRRRRRRR");
-                    break;
                 }
                 escenario.restarCerveza();
                 System.out.println("Se tomó una. Le faltan beber " + sedDeHomero + " cervezas.");
                 System.out.println("Quedan " + escenario.cervezasRestantes + " cervezas.");
-                if(sedDeHomero == 0) {
-                    //Final. Se las tomó todas y se debería terminar la partida con triunfo.
-                    JOptionPane.showMessageDialog(null, "Se las ha bebido todas, borracho! Hora de volver a casa.");
-                    break;
-                }
                 break;
             case FINAL:
                 //Final. Se informa sedDeHomero y se termina la partida.
-                JOptionPane.showMessageDialog(null, "Oooac... a dormir, un día duro de trabajo...");
+                JOptionPane.showMessageDialog(null, "GANADOR! -Oooac... a dormir, un día duro de trabajo...- pensó Homero");
                 System.exit(0);
                 break;
-            /*
-            case ADVERSARIO:
-                //Derrota. Se termina la partida.
-                JOptionPane.showMessageDialog(null, "Oh, perdiste :(");
-                System.exit(0);
-
-            */
             default:
                 break;
         }

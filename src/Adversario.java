@@ -153,8 +153,8 @@ public class Adversario extends TimerTask implements Constantes {
                 escenario.jugador.sedDeHomero+=CHOQUE_ADVERSARIO;
                 //Verifica que no le de más sed a Homero sin que hayan cervezas
                 //Si ocurre, pierde!
-                if(escenario.cervezasRestantes == 0 && escenario.jugador.getSedDeHomero()>0) {
-                    JOptionPane.showMessageDialog(null, "SE ACABARON LAS DUFF :(");
+                if( escenario.cervezasRestantes == 0 && escenario.jugador.getSedDeHomero()>0 ) {
+                    JOptionPane.showMessageDialog(null, "PERDEDOR! -este se está burlando de mí!- :(");
                     System.exit(0);
                 }
 

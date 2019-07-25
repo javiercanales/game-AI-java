@@ -48,6 +48,10 @@ public class Escenario extends JComponent implements Constantes {
         //Construccion del escenario y sus entidades
         construirEscenario();
 
+        //Asignar listas de destinos y el destino final a la inteligencia del jugador
+        jugador.inteligencia.destinoFinal = destinoFinal;
+        jugador.inteligencia.destinos = destinos;
+
         //iconos pequeños para la barra
         try {
             duffcita = ImageIO.read(new File("images/recompensa.png"));
@@ -71,19 +75,8 @@ public class Escenario extends JComponent implements Constantes {
         hilo = new Thread(() -> {
             while(jugador.getSedDeHomero() != 0) {
                 synchronized (this) {
-                    if(cervezasRestantes == 0) {
-                        System.out.println("Reestableciendo cervezas... Sed: numero de cervezas menos las que llevaba --- ");
-
-                        for(int i=0; i< NUMERO_CERVEZAS; i++) {
-                            establecerRecompensas();
-                        }
-                        jugador.inteligencia.destinos = destinos; //nuevos destinos
-
-                        nuevaSed = NUMERO_CERVEZAS/2 + jugador.getSedDeHomero();
-                        if(nuevaSed > NUMERO_CERVEZAS) nuevaSed = NUMERO_CERVEZAS;
-                        cervezasRestantes = NUMERO_CERVEZAS;
-                        jugador.setSedDeHomero(nuevaSed);
-                        reloj.setTiempoExtra();
+                    if (cervezasRestantes == 0) {
+                        restablecerDuffs();
                     }
                 }
             }
@@ -102,6 +95,21 @@ public class Escenario extends JComponent implements Constantes {
         relojTiempoJuego.scheduleAtFixedRate(reloj, 0, 1000);
 
         hilo.start();
+    }
+
+    public void restablecerDuffs() {
+        System.out.println("Reestableciendo cervezas... Sed: numero de cervezas menos las que llevaba --- ");
+
+        for(int i=0; i< NUMERO_CERVEZAS; i++) {
+            establecerRecompensas();
+        }
+        jugador.inteligencia.destinos = destinos; //nuevos destinos
+
+        nuevaSed = NUMERO_CERVEZAS/2 + jugador.getSedDeHomero();
+        if(nuevaSed > NUMERO_CERVEZAS) nuevaSed = NUMERO_CERVEZAS;
+        cervezasRestantes = NUMERO_CERVEZAS;
+        jugador.setSedDeHomero(nuevaSed);
+        reloj.setTiempoExtra();
     }
     
     @Override
@@ -131,7 +139,7 @@ public class Escenario extends JComponent implements Constantes {
     private void construccionBarraJuego(Graphics g) {
         //iconos pequeños de la barra
         g.drawImage(duffcita, 70, 2, null);
-        g.drawImage(relojito, 1*ANCHURA_ESCENARIO/9, 2, null);
+        g.drawImage(relojito, 4*ANCHURA_ESCENARIO/31, 2, null);
         g.drawImage(nubecita, (2*ANCHURA_ESCENARIO/8) - 25, 2, null);
 
         if(jugador != null && reloj != null) {     //para que al iniciar el programa no ocurran errores de nullpointer
@@ -146,13 +154,13 @@ public class Escenario extends JComponent implements Constantes {
 
             //Timer-reloj del juego
             if( reloj.minutos>=10 && reloj.segundos>=10 ) {
-                g.drawString(reloj.minutos+":"+reloj.segundos, 1*ANCHURA_ESCENARIO/8, 3* MARGEN_LARGO_BARRA /4);
+                g.drawString(reloj.minutos+":"+reloj.segundos, 1*ANCHURA_ESCENARIO/7, 3* MARGEN_LARGO_BARRA /4);
             } else if( reloj.minutos>9 ) {
-                g.drawString(reloj.minutos+":0"+reloj.segundos, 1*ANCHURA_ESCENARIO/8, 3* MARGEN_LARGO_BARRA /4);
+                g.drawString(reloj.minutos+":0"+reloj.segundos, 1*ANCHURA_ESCENARIO/7, 3* MARGEN_LARGO_BARRA /4);
             } else if( reloj.segundos>9 ) {
-                g.drawString("0"+reloj.minutos+":"+reloj.segundos, 1*ANCHURA_ESCENARIO/8, 3* MARGEN_LARGO_BARRA /4);
+                g.drawString("0"+reloj.minutos+":"+reloj.segundos, 1*ANCHURA_ESCENARIO/7, 3* MARGEN_LARGO_BARRA /4);
             } else {
-                g.drawString("0"+reloj.minutos+":0"+reloj.segundos, 1*ANCHURA_ESCENARIO/8, 3* MARGEN_LARGO_BARRA /4);
+                g.drawString("0"+reloj.minutos+":0"+reloj.segundos, 1*ANCHURA_ESCENARIO/7, 3* MARGEN_LARGO_BARRA /4);
             }
         }
     }
@@ -167,25 +175,25 @@ public class Escenario extends JComponent implements Constantes {
         int restriccionCasa = establecerFinal();
 
         //Posiciones obstaculos
-        for(int i=0; i<NUMERO_OBSTACULOS; i++) {
+        for (int i=0; i<NUMERO_OBSTACULOS; i++) {
             establecerObstaculo(restriccionCasa);
         }
         //Posiciones obstaculos 2 (bar de moe)
-        for(int i=0; i<NUMERO_OBSTACULOS_2; i++) {
+        for (int i=0; i<NUMERO_OBSTACULOS_2; i++) {
             establecerObstaculo2(restriccionCasa);
         }
 
         //Posiciones adversarios
-        for(int i=0; i<NUMERO_ADVERSARIOS; i++) {
+        for (int i=0; i<NUMERO_ADVERSARIOS; i++) {
             //Pares se mueven vertical, impares horizontal (1 y 1)
-            if(i%2 == 0) {
+            if (i%2 == 0) {
                 establecerAdversarios(true, restriccionJugador);
-            }else{
+            } else {
                 establecerAdversarios(false, restriccionJugador);
             }
         }
         //Posiciones recompensas
-        for(int i=0; i< NUMERO_CERVEZAS; i++) {
+        for (int i=0; i< NUMERO_CERVEZAS; i++) {
             establecerRecompensas();
         }
     }
@@ -201,13 +209,21 @@ public class Escenario extends JComponent implements Constantes {
         return x;
     }
 
+    /**
+     * PENDIENTE: Se debe implementar restricciones para que no queden encerrados los personajes o recompensas.
+     * Por ejemplo, evitar posiciones en los obstáculos que sean (x,y) v/s (x+1,y+1) v/s (x+2,y), lo que claramente
+     * produce un espacio encerrado.
+     */
     private void establecerObstaculo(int restriccionY) {
         int x,y;
         x = randomValue(0, NUMERO_CELDAS_ANCHO-1);
         y = randomValue(0, NUMERO_CELDAS_LARGO-1);
-        if(celdas[x][y].isDisponible() && y != restriccionY) {
+        Point puntoPrueba = new Point(x,y);
+
+        if(celdas[x][y].isDisponible() && y != restriccionY && !puntosCeldaRestriccionObstaculo.contains(puntoPrueba)) {
             //Se define un obstaculo
             celdas[x][y].setObstaculo();
+            agregarRestricciones(x,y);
         }
         else{
             establecerObstaculo(restriccionY);
@@ -217,13 +233,24 @@ public class Escenario extends JComponent implements Constantes {
         int x,y;
         x = randomValue(0, NUMERO_CELDAS_ANCHO-1);
         y = randomValue(0, NUMERO_CELDAS_LARGO-1);
-        if(celdas[x][y].isDisponible() && y != restriccionY) {
+        Point puntoPrueba = new Point(x,y);
+
+        if (celdas[x][y].isDisponible() && y != restriccionY && !puntosCeldaRestriccionObstaculo.contains(puntoPrueba)) {
             //Se define un obstaculo
             celdas[x][y].setObstaculo2();
+            agregarRestricciones(x,y);
         }
-        else{
+        else {
             establecerObstaculo2(restriccionY);
         }
+    }
+
+    public void agregarRestricciones(int x, int y) {
+        puntosCeldaRestriccionObstaculo.add( new Point(x+1,y+1) );
+        puntosCeldaRestriccionObstaculo.add( new Point(x-1,y+1) );
+        //puntosCeldaRestriccionObstaculo.add( new Point(x+2, y) );
+        puntosCeldaRestriccionObstaculo.add( new Point(x+1, y-1) );
+        puntosCeldaRestriccionObstaculo.add( new Point(x-1, y-1) );
     }
 
     private void establecerAdversarios(boolean movimientoVertical, int restriccionX) {
@@ -262,14 +289,17 @@ public class Escenario extends JComponent implements Constantes {
 
         if(x != 0 && y != 0) {
             celdas[x][y].setCasa();
-            celdas[x][y+1].setObstaculo();
-            celdas[x+1][y].setObstaculo();
-
             celdas[x+1][y+1].setFinal();
             destinoFinal = new Estado(x+1, y+1, 'N', null);
 
+            celdas[x][y+1].setObstaculo();
+            agregarRestricciones(x, y+1);
+            celdas[x+1][y].setObstaculo();
+            agregarRestricciones(x+1, y);
             celdas[x+2][y].setObstaculo();
+            agregarRestricciones(x+2, y);
             celdas[x+2][y+1].setObstaculo();
+            agregarRestricciones(x+2,y+1);
         } else {
             establecerFinal();
         }

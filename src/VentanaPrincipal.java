@@ -5,6 +5,8 @@ public class VentanaPrincipal extends JFrame implements Constantes {
     
     //nuestra clase se compone de un lienzo de dibujo (heredada de canvas)
     public Lienzo lienzo;
+    //reproductor de música
+    public HiloMusica player;
     
     //constructor
     public VentanaPrincipal() {
@@ -14,6 +16,9 @@ public class VentanaPrincipal extends JFrame implements Constantes {
         this.setSize(lienzo.getWidth(),lienzo.getHeight());
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         this.setTitle("Juego IA");
+
+        player = new HiloMusica(RUTA+"/music/simpson8bit.wav",2);
+        player.run();
     }
 
 }

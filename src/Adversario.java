@@ -127,7 +127,7 @@ public class Adversario extends TimerTask implements Constantes {
     }
 
     public boolean sePuedeAvanzar(int x, int y) {
-        if(escenario.celdas[x][y].tipo != OBSTACULO && escenario.celdas[x][y].tipo != ADVERSARIO
+        if(escenario.celdas[x][y].tipo != OBSTACULO && escenario.celdas[x][y].tipo != ADVERSARIO && escenario.celdas[x][y].tipo != FINAL
                 && escenario.celdas[x][y].tipo != CASA && escenario.celdas[x][y].tipo != JUGADOR && escenario.celdas[x][y].tipo != OBSTACULO2) {
             return true;
         }
@@ -154,8 +154,7 @@ public class Adversario extends TimerTask implements Constantes {
                 //Verifica que no le de más sed a Homero sin que hayan cervezas
                 //Si ocurre, pierde!
                 if( escenario.cervezasRestantes == 0 && escenario.jugador.getSedDeHomero()>0 ) {
-                    JOptionPane.showMessageDialog(null, "PERDEDOR! -este se está burlando de mí!- :(");
-                    System.exit(0);
+                    escenario.restablecerDuffs();
                 }
 
                 /* El adversario pasa por sobre el jugador */
@@ -205,8 +204,7 @@ public class Adversario extends TimerTask implements Constantes {
                 //Verifica que no le de más sed a Homero sin que hayan cervezas
                 //Si ocurre, pierde!
                 if(escenario.cervezasRestantes == 0 && escenario.jugador.getSedDeHomero()>0) {
-                    JOptionPane.showMessageDialog(null, "SE ACABARON LAS DUFF :(");
-                    System.exit(0);
+                    escenario.restablecerDuffs();
                 }
 
                 /* El adversario pasa por sobre el jugador */

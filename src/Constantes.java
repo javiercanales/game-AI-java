@@ -7,6 +7,11 @@ public interface Constantes {
     //public final int LARGO_ESCENARIO=(PIXEL_CELDA*NUMERO_CELDAS_LARGO)+LARGO_BORDE_VENTANA;
     //public final int ANCHURA_ESCENARIO = 1600;
     //public final int LARGO_ESCENARIO = 900+20+32;
+
+    public final String RUTA = "file:///"+System.getProperty( "user.dir" );
+
+    public final ArrayList<Point> puntosCeldaRestriccionObstaculo = new ArrayList<>();
+
     public final int ANCHURA_ESCENARIO = widthScreen();
     public final int LARGO_ESCENARIO = heightScreen();
     //size of the cells
@@ -36,10 +41,10 @@ public interface Constantes {
     public final int FACTOR_ANCHO=3;
     public final int MARGEN_LARGO_BARRA =23;
 
-    public final int NUMERO_OBSTACULOS=(NUMERO_CELDAS_ANCHO*NUMERO_CELDAS_LARGO)/8;
+    public final int NUMERO_OBSTACULOS=(NUMERO_CELDAS_ANCHO*NUMERO_CELDAS_LARGO)/7;
     public final int NUMERO_OBSTACULOS_2=(NUMERO_CELDAS_ANCHO*NUMERO_CELDAS_LARGO)/15;
     public final int NUMERO_ADVERSARIOS=(NUMERO_CELDAS_ANCHO*NUMERO_CELDAS_LARGO)/30;
-    public final int NUMERO_CERVEZAS=(NUMERO_CELDAS_ANCHO*NUMERO_CELDAS_LARGO)/30;
+    public final int NUMERO_CERVEZAS=(NUMERO_CELDAS_ANCHO*NUMERO_CELDAS_LARGO)/18;
 
     public final Color COLOR_JUGADOR=Color.GREEN;
     public final Color COLOR_OBSTACULOS=Color.BLACK;

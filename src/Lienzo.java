@@ -58,11 +58,8 @@ public class Lienzo extends Canvas implements Constantes {
             }
         });
 
-        escenario.jugador.inteligencia.destinoFinal = escenario.destinoFinal;
-        escenario.jugador.inteligencia.destinos = escenario.destinos;
-
         lanzadorTareas = new Timer();
-        lanzadorTareas.scheduleAtFixedRate(escenario.jugador.inteligencia,0,1000);
+        lanzadorTareas.scheduleAtFixedRate(escenario.jugador.inteligencia,1000,500);
     }
 
     /*

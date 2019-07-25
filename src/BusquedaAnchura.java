@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.TimerTask;
 
@@ -167,12 +168,6 @@ public class BusquedaAnchura extends TimerTask implements Constantes {
 
     }
 
-    /**
-     * PENDIENTE: Se debe implementar restricciones para que no queden encerrados los personajes o recompensas.
-     * Por ejemplo, evitar posiciones en los obstáculos que sean (x,y) v/s (x+1,y+1) v/s (x+2,y), lo que claramente
-     * produce un espacio encerrado.
-     */
-
     @Override
     public void run() {
         if( !parar ) {
@@ -192,9 +187,14 @@ public class BusquedaAnchura extends TimerTask implements Constantes {
                 //busco ruta
                 resultado=this.buscar(subinicial,subobjetivo);
 
-                if ( !subinicial.equals(subobjetivo) && !resultado)
+                if ( !subinicial.equals(subobjetivo) && !resultado )
                     resetear();
-            } while (!resultado && !destinos.isEmpty());
+                else if ( subinicial.equals(subobjetivo) ) {
+                    JOptionPane.showMessageDialog(null, "GANADOR! -Oooac... a dormir, un día duro de trabajo...- pensó Homero");
+                    System.exit(0);
+                }
+
+            } while ( !resultado );
         } else {
             do { //el estado inicial es donde estoy
                 subinicial=new Estado(jugador.x,jugador.y,'N',null);
@@ -221,6 +221,7 @@ public class BusquedaAnchura extends TimerTask implements Constantes {
                     }
                     if ( destinos.isEmpty() ) {
                         System.out.println("Definitivamente se acabo a donde ir");
+                        escenario.restablecerDuffs();   //para que vuelvan las duffs
                         this.cancel();
                     }
                 }

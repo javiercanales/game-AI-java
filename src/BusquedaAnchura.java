@@ -190,8 +190,8 @@ public class BusquedaAnchura extends TimerTask implements Constantes {
                 if ( !subinicial.equals(subobjetivo) && !resultado )
                     resetear();
                 else if ( subinicial.equals(subobjetivo) ) {
+                    escenario.detenerJuego();
                     JOptionPane.showMessageDialog(null, "GANADOR! -Oooac... a dormir, un día duro de trabajo...- pensó Homero");
-                    System.exit(0);
                 }
 
             } while ( !resultado );

@@ -1,4 +1,5 @@
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -16,15 +17,20 @@ import java.util.Timer;
  */
 
 public class Lienzo extends Canvas implements Constantes {
-   
+
+    public VentanaJuego ventanaJuego;
+    public JFrame ventanaMenu;
     public Escenario escenario;
     public Image fondo;
 
     public Graphics graficoBuffer;
     public Image imagenBuffer;
-    public Timer lanzadorTareas;
+    public Timer lanzadorJugadorIA;
+    public Thread hilo;
+    public Timer lanzadorAdversariosIA;
 
-    public Lienzo() {
+
+    public Lienzo(VentanaJuego ventanaJuego, JFrame ventanaMenu) {
         try {
             fondo = ImageIO.read(new File("images/fondo.png"));
             fondo = fondo.getScaledInstance(getAncho(), getLargo(), Image.SCALE_SMOOTH);
@@ -32,7 +38,8 @@ public class Lienzo extends Canvas implements Constantes {
         } catch (IOException error) {
             System.out.println("Error al cargar el fondo!!!");
         }
-
+        this.ventanaJuego = ventanaJuego;
+        this.ventanaMenu = ventanaMenu;
         escenario = new Escenario(this);
 
         this.setSize(ANCHURA_ESCENARIO,LARGO_ESCENARIO);
@@ -57,9 +64,31 @@ public class Lienzo extends Canvas implements Constantes {
                 repaint();
             }
         });
+        hilo = new Thread(() -> {
+            while (true) {
+                synchronized (this) {
+                    if (escenario.cervezasRestantes == 0 && escenario.jugador.getSedDeHomero() != 0) {
+                        escenario.restablecerDuffs();
+                    }
+                }
+            }
+        });
+        hilo.start();
 
-        lanzadorTareas = new Timer();
-        lanzadorTareas.scheduleAtFixedRate(escenario.jugador.inteligencia,1000,500);
+        //Reloj de tiempo restante
+        escenario.reloj = new Reloj(this.escenario);
+        escenario.relojTiempoJuego = new Timer();
+        escenario.relojTiempoJuego.scheduleAtFixedRate(escenario.reloj, 0, 1000);
+
+        //Vida a los adversarios (sin inteligencia)
+        lanzadorAdversariosIA = new Timer();
+        int period = 1000;
+        for(int i=0; i<NUMERO_ADVERSARIOS; i++) {
+            lanzadorAdversariosIA.scheduleAtFixedRate(escenario.adversarios[i], 0, period + 100*i);
+        }
+        //Jugador con inteligencia
+        lanzadorJugadorIA = new Timer();
+        lanzadorJugadorIA.scheduleAtFixedRate(escenario.jugador.inteligencia,1000,500);
     }
 
     /*

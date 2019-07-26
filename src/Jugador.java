@@ -148,8 +148,10 @@ public class Jugador implements Constantes {
         switch (escenario.celdas[x][y].tipo) {
             case RECOMPENSA:
                 //Definir recompensa.
-                if(sedDeHomero > 0) {
+                if (sedDeHomero > 0) {
                     sedDeHomero--;
+                } else if (sedDeHomero == 0) {
+                    sedDeHomero++;
                 }
                 escenario.restarCerveza();
                 System.out.println("Se tomó una. Le faltan beber " + sedDeHomero + " cervezas.");
@@ -157,8 +159,8 @@ public class Jugador implements Constantes {
                 break;
             case FINAL:
                 //Final. Se informa sedDeHomero y se termina la partida.
+                escenario.detenerJuego();
                 JOptionPane.showMessageDialog(null, "GANADOR! -Oooac... a dormir, un día duro de trabajo...- pensó Homero");
-                System.exit(0);
                 break;
             default:
                 break;

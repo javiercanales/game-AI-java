@@ -15,10 +15,8 @@ public class Escenario extends JComponent implements Constantes {
     public Adversario[] adversarios;
     public int contadorAdversarios;
     public Lienzo lienzo;
-    public Thread hilo;
     public int cervezasRestantes;
     public int nuevaSed;
-    public Timer lanzadorTareas;
     public Reloj reloj;
     public Timer relojTiempoJuego;
 
@@ -71,30 +69,6 @@ public class Escenario extends JComponent implements Constantes {
             e.printStackTrace();
         }
         nubecita = nubecita.getScaledInstance(18, 20, Image.SCALE_DEFAULT);
-
-        hilo = new Thread(() -> {
-            while(jugador.getSedDeHomero() != 0) {
-                synchronized (this) {
-                    if (cervezasRestantes == 0) {
-                        restablecerDuffs();
-                    }
-                }
-            }
-        });
-
-        //Vida a los adversarios (sin inteligencia)
-        lanzadorTareas = new Timer();
-        int period = 1000;
-        for(int i=0; i<NUMERO_ADVERSARIOS; i++) {
-            lanzadorTareas.scheduleAtFixedRate(adversarios[i], 0, period + 100*i);
-        }
-
-        //Reloj de tiempo restante
-        reloj = new Reloj(this);
-        relojTiempoJuego = new Timer();
-        relojTiempoJuego.scheduleAtFixedRate(reloj, 0, 1000);
-
-        hilo.start();
     }
 
     public void restablecerDuffs() {
@@ -304,6 +278,19 @@ public class Escenario extends JComponent implements Constantes {
             establecerFinal();
         }
         return y+2; //dos celdas de distancia a la casa, sin obstáculos
+    }
+
+    public void detenerJuego() {
+        lienzo.lanzadorJugadorIA.cancel();
+        lienzo.lanzadorAdversariosIA.cancel();
+        lienzo.ventanaJuego.setVisible(false);
+        lienzo.ventanaMenu.setVisible(true);
+        jugador.inteligencia.cancel();
+        for (Adversario adversario: adversarios) {
+            adversario.cancel();
+        }
+        reloj.cancel();
+        System.out.println("El juego se ha detenido correctamente --------------------------------------");
     }
 
     public void moverAdversario() {

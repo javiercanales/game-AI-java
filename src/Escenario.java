@@ -26,11 +26,15 @@ public class Escenario extends JComponent implements Constantes {
     public Image duffcita;
     public Image relojito;
     public Image nubecita;
-    
+
+    public int CANTIDAD_REAL_DUFFS = NUMERO_CERVEZAS;
+    public int CANTIDAD_REAL_ADVERSARIOS = NUMERO_ADVERSARIOS;
+
     public Escenario(Lienzo lienzo) {
         this.lienzo=lienzo;
         destinos=new ArrayList<>();
         destinoFinal=null;
+        analizarModoInicio();
 
         celdas = new Celda[NUMERO_CELDAS_ANCHO][NUMERO_CELDAS_LARGO];
         //inicializar el array de celdas
@@ -39,16 +43,21 @@ public class Escenario extends JComponent implements Constantes {
                celdas[i][j]=new Celda(i+(i*PIXEL_CELDA), MARGEN_LARGO_BARRA +j+(j*PIXEL_CELDA));
            }
         }
-        adversarios = new Adversario[NUMERO_ADVERSARIOS];
+        adversarios = new Adversario[CANTIDAD_REAL_ADVERSARIOS];
         contadorAdversarios = 0;
-        cervezasRestantes = NUMERO_CERVEZAS;
 
         //Construccion del escenario y sus entidades
         construirEscenario();
+        cervezasRestantes = CANTIDAD_REAL_DUFFS;
 
         //Asignar listas de destinos y el destino final a la inteligencia del jugador
         jugador.inteligencia.destinoFinal = destinoFinal;
         jugador.inteligencia.destinos = destinos;
+
+        //Asignar listas de destinos y el destino final a la inteligencia de los adversarios
+        for(Adversario adversario: adversarios) {
+            adversario.inteligencia.destinos = destinos;
+        }
 
         //iconos pequeños para la barra
         try {
@@ -70,18 +79,25 @@ public class Escenario extends JComponent implements Constantes {
         }
         nubecita = nubecita.getScaledInstance(18, 20, Image.SCALE_DEFAULT);
     }
+    public void analizarModoInicio() {
+        if (lienzo.hardMode) {
+            CANTIDAD_REAL_DUFFS = CANTIDAD_REAL_DUFFS *2;
+            if (!lienzo.playerIA) {
+                CANTIDAD_REAL_ADVERSARIOS = CANTIDAD_REAL_ADVERSARIOS*3;
+            }
+        }
+    }
 
     public void restablecerDuffs() {
         System.out.println("Reestableciendo cervezas... Sed: numero de cervezas menos las que llevaba --- ");
-
-        for(int i=0; i< NUMERO_CERVEZAS; i++) {
+        for(int i = 0; i< CANTIDAD_REAL_DUFFS; i++) {
             establecerRecompensas();
         }
         jugador.inteligencia.destinos = destinos; //nuevos destinos
 
-        nuevaSed = NUMERO_CERVEZAS/2 + jugador.getSedDeHomero();
-        if(nuevaSed > NUMERO_CERVEZAS) nuevaSed = NUMERO_CERVEZAS;
-        cervezasRestantes = NUMERO_CERVEZAS;
+        nuevaSed = CANTIDAD_REAL_DUFFS /2 + jugador.getSedDeHomero();
+        if(nuevaSed > CANTIDAD_REAL_DUFFS) nuevaSed = CANTIDAD_REAL_DUFFS;
+        cervezasRestantes = CANTIDAD_REAL_DUFFS;
         jugador.setSedDeHomero(nuevaSed);
         reloj.setTiempoExtra();
     }
@@ -140,6 +156,7 @@ public class Escenario extends JComponent implements Constantes {
     }
 
     private void construirEscenario() {
+
         //Posicion inicial jugador
         int restriccionJugador = establecerJugador();
 
@@ -158,7 +175,7 @@ public class Escenario extends JComponent implements Constantes {
         }
 
         //Posiciones adversarios
-        for (int i=0; i<NUMERO_ADVERSARIOS; i++) {
+        for (int i=0; i<CANTIDAD_REAL_ADVERSARIOS; i++) {
             //Pares se mueven vertical, impares horizontal (1 y 1)
             if (i%2 == 0) {
                 establecerAdversarios(true, restriccionJugador);
@@ -166,8 +183,9 @@ public class Escenario extends JComponent implements Constantes {
                 establecerAdversarios(false, restriccionJugador);
             }
         }
+
         //Posiciones recompensas
-        for (int i=0; i< NUMERO_CERVEZAS; i++) {
+        for (int i = 0; i< CANTIDAD_REAL_DUFFS; i++) {
             establecerRecompensas();
         }
     }
@@ -281,16 +299,28 @@ public class Escenario extends JComponent implements Constantes {
     }
 
     public void detenerJuego() {
-        lienzo.lanzadorJugadorIA.cancel();
+        if(lienzo.playerIA) {
+            lienzo.lanzadorJugadorIA.cancel();
+            jugador.inteligencia.cancel();
+        }
+
         lienzo.lanzadorAdversariosIA.cancel();
-        lienzo.ventanaJuego.setVisible(false);
-        lienzo.ventanaMenu.setVisible(true);
-        jugador.inteligencia.cancel();
         for (Adversario adversario: adversarios) {
-            adversario.cancel();
+            adversario.inteligencia.cancel();
         }
         reloj.cancel();
+        lienzo.ventanaJuego.player.cancion.close();
+
+        lienzo.ventanaJuego.setVisible(false);
+        lienzo.ventanaMenu.setVisible(true);
         System.out.println("El juego se ha detenido correctamente --------------------------------------");
+    }
+
+    public void informarCambio(Estado estado) {
+        jugador.inteligencia.destinos.remove(estado);
+        for (Adversario adversario: adversarios) {
+            adversario.inteligencia.destinos.remove(estado);
+        }
     }
 
     public void moverAdversario() {

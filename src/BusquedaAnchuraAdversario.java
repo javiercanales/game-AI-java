@@ -3,12 +3,11 @@ import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.TimerTask;
 
-public class BusquedaAnchura extends TimerTask implements Constantes {
+public class BusquedaAnchuraAdversario extends TimerTask implements Constantes {
 
     public Escenario escenario;
-    public Jugador jugador;
+    public Adversario adversario;
     public ArrayList<Estado> destinos;
-    public Estado destinoFinal;
     public boolean parar;
     public ArrayList<Estado> colaEstados;
     public ArrayList<Estado> historial;
@@ -20,7 +19,7 @@ public class BusquedaAnchura extends TimerTask implements Constantes {
     public boolean exito;
     public int intentosRep;
 
-    public BusquedaAnchura(Escenario escenario, Jugador jugador) {
+    public BusquedaAnchuraAdversario(Escenario escenario, Adversario adversario) {
 
         this.escenario=escenario;
         colaEstados=new ArrayList<>();
@@ -28,10 +27,9 @@ public class BusquedaAnchura extends TimerTask implements Constantes {
         pasos=new ArrayList<>();
         index_pasos=0;
         exito=false;
-        this.jugador=jugador;
+        this.adversario=adversario;
         destinos=new ArrayList<>();
         parar=false;
-        destinoFinal=null;
     }
 
     public boolean buscar(Estado inicial, Estado objetivo) {
@@ -68,7 +66,7 @@ public class BusquedaAnchura extends TimerTask implements Constantes {
     }
 
     private void resetear() {
-        System.out.println("reseteando");
+        System.out.println("reseteando en adversario");
         colaEstados.clear();
         pasos.clear();
         historial.clear();
@@ -184,21 +182,17 @@ public class BusquedaAnchura extends TimerTask implements Constantes {
         return valor;
     }
 
-    public Estado buscarMejorDestino (Estado subinicial, int index) {
+    public Estado buscarMejorDestino (Estado subinicial) {
         try {
             Estado destinoDefinido = destinos.get(0);
             double temp, distanciaDefinida;
             distanciaDefinida = distancia(subinicial, destinoDefinido);
 
-            if (index < destinos.size()-1) {
-                for(int i=0; i<destinos.size(); i++) {
-                    temp = distancia(subinicial, destinos.get(i));
-                    if (temp < distanciaDefinida) {
-                        destinoDefinido = destinos.get(i);
-                    }
+            for(Estado destino: destinos) {
+                temp = distancia(subinicial, destino);
+                if (temp < distanciaDefinida) {
+                    destinoDefinido = destino;
                 }
-            } else {
-                destinoDefinido = destinos.get(randomValue(0, destinos.size()-1));
             }
             return destinoDefinido;
         } catch (ConcurrentModificationException e) {
@@ -228,53 +222,50 @@ public class BusquedaAnchura extends TimerTask implements Constantes {
 
         if(escenario.jugador.getSedDeHomero() == 0) {       //Logrado, debe buscar el final
             do { //el estado inicial es donde estoy
-                subinicial=new Estado(jugador.x,jugador.y,'N',null);
-                //el estado final del juego
-                subobjetivo=destinoFinal;
+                subinicial = new Estado(adversario.x, adversario.y,'N',null);
+                //a buscar a Homero antes que llegue a casa!
+                subobjetivo = new Estado(escenario.jugador.x, escenario.jugador.y, 'N', null);
 
-                System.out.println("Busqueda de jugador en (" + subinicial.x + "," + subinicial.y + ")");
-                System.out.println("hacia la posicion FINAL (" + subobjetivo.x + "," + subobjetivo.y + ")");
+                System.out.println("Busqueda de adversario en (" + subinicial.x + "," + subinicial.y + ")");
+                System.out.println("hacia la posicion del JUGADOR (" + subobjetivo.x + "," + subobjetivo.y + ")");
                 //busco ruta
-                resultado=this.buscar(subinicial,subobjetivo);
+                resultado = this.buscar(subinicial,subobjetivo);
 
                 if ( !subinicial.equals(subobjetivo) && !resultado && intentosRep < 20 ) {
-                    System.out.println("Aqui jugador a FINAL --------------- intentos repetitivos: " + intentosRep);
+                    System.out.println("Aqui adversario --------------- intentos repetitivos: " + intentosRep);
                     intentosRep++;
                 } else if ( intentosRep >= 20 ) {
-                    System.out.println("Aca jugador en FINAL se pasó --------------------------------------------------");
+                    System.out.println("Aca adversario se pasó --------------------------------------------------");
                     return;
-                }
-                if ( subinicial.equals(subobjetivo) ) {
-                    escenario.detenerJuego();
-                    JOptionPane.showMessageDialog(null, "GANADOR! -Oooac... a dormir, un día duro de trabajo...- pensó Homero");
                 }
             } while ( !resultado );
         } else {
             do { //el estado inicial es donde estoy
-                subinicial=new Estado(jugador.x,jugador.y,'N',null);
-                //el estado final es a donde quiero ir
-                //subobjetivo = destinos.get(0);
+                subinicial = new Estado(adversario.x, adversario.y,'N',null);
+
                 //el estado final es a donde quiero ir
                 if (destinos.isEmpty()) {
                     resultado = false;
                     continue;
                 } else {
-                    subobjetivo = buscarMejorDestino(subinicial, index);
+                    subobjetivo = destinos.get(index);
                 }
 
-                System.out.println("Busqueda de jugador en (" + subinicial.x + "," + subinicial.y + ")");
+                //subobjetivo = buscarMejorDestino(subinicial);
+
+                System.out.println("Busqueda de adversario en (" + subinicial.x + "," + subinicial.y + ")");
                 System.out.println("hacia la posicion (" + subobjetivo.x + "," + subobjetivo.y + ")");
                 //busco ruta
-                resultado = this.buscar(subinicial,subobjetivo);
+                resultado=this.buscar(subinicial,subobjetivo);
                 if ( subinicial.equals(subobjetivo) )
                     escenario.informarCambio(subobjetivo);
                 else {
-                    if ( !resultado && intentosRep < 20) {
-                        intentosRep++;
+                    if ( !resultado && intentosRep < 20 ) {
                         index = avanzarIndice(index);
-                        System.out.println("Aqui jugador --------------- intentos repetitivos: " + intentosRep);
-                    } else if ( intentosRep >= 20) {
-                        System.out.println("Aca jugador se pasó");
+                        System.out.println("Aqui adversario --------------- intentos repetitivos: " + intentosRep);
+                        intentosRep++;
+                    } else if ( intentosRep >= 20 ) {
+                        System.out.println("Aca adversario se pasó --------------------------------------------------");
                         return;
                     }
                 }
@@ -302,10 +293,10 @@ public class BusquedaAnchura extends TimerTask implements Constantes {
             }
 
             switch (pasos.get(1)) {
-                case 'D': jugador.moverCeldaAbajo();     break;
-                case 'U': jugador.moverCeldaArriba();    break;
-                case 'R': jugador.moverCeldaDerecha();   break;
-                case 'L': jugador.moverCeldaIzquierda(); break;
+                case 'D': adversario.moverCeldaAbajo();     break;
+                case 'U': adversario.moverCeldaArriba();    break;
+                case 'R': adversario.moverCeldaDerecha();   break;
+                case 'L': adversario.moverCeldaIzquierda(); break;
             }
             escenario.lienzo.repaint();
         }

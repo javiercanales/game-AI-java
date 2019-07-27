@@ -33,21 +33,50 @@ public class Main {
         frame.setContentPane(panel);
 
         panel.setLayout(null);
-        JButton jugar = new JButton("Jugar!");
-        jugar.setBounds(460, 15, 100, 30);
+
+        JButton jugar = new JButton("Jugar! (EASY)");
+        jugar.setBounds(360, 15, 125, 30);
         jugar.setBackground(Color.ORANGE);
         jugar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                VentanaJuego ventanaJuego = new VentanaJuego(frame);
+                VentanaJuego ventanaJuego = new VentanaJuego(frame, false, true);
                 frame.setVisible(false);
                 ventanaJuego.setVisible(true);
-                ventanaJuego.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             }
         });
 
+        JButton jugarHard = new JButton("Jugar! (HARD)");
+        jugarHard.setBounds(560, 15, 125, 30);
+        jugarHard.setBackground(Color.DARK_GRAY);
+        jugarHard.setForeground(Color.RED);
+        jugarHard.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VentanaJuego ventanaJuego = new VentanaJuego(frame, true, true);
+                frame.setVisible(false);
+                ventanaJuego.setVisible(true);
+            }
+        });
+
+        JButton jugarSinIA = new JButton("Jugador sin IA (HARD)");
+        jugarSinIA.setBounds(760, 15, 170, 30);
+        jugarSinIA.setBackground(Color.BLACK);
+        jugarSinIA.setForeground(Color.RED);
+        jugarSinIA.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                VentanaJuego ventanaJuego = new VentanaJuego(frame, true, false);
+                frame.setVisible(false);
+                ventanaJuego.setVisible(true);
+            }
+        });
+
+
         panel.add(jugar);
-        frame.setTitle("Mmm, cerveza's Homero journey!");
+        panel.add(jugarHard);
+        panel.add(jugarSinIA);
+        frame.setTitle("Mmm, cerveza's Homero challenge!");
         frame.setVisible(true);
 
     }

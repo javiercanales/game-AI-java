@@ -1,21 +1,18 @@
-import javax.swing.JOptionPane;
 import java.util.TimerTask;
 
-public class Adversario implements Constantes {
+public class AdversarioOLD extends TimerTask implements Constantes {
     public int x;
     public int y;
     public Escenario escenario;
     public Celda adversario;
     public boolean movimientoVertical;
-    public BusquedaAnchuraAdversario inteligencia;
 
-    public Adversario(int x, int y, Escenario escenario, boolean movimientoVertical) {
+    public AdversarioOLD(int x, int y, Escenario escenario, boolean movimientoVertical) {
         this.x = x;
         this.y = y;
         adversario = escenario.celdas[x][y];
         this.escenario = escenario;
         this.movimientoVertical = movimientoVertical;
-        this.inteligencia = new BusquedaAnchuraAdversario(escenario, this);
     }
 
 
@@ -27,18 +24,15 @@ public class Adversario implements Constantes {
 
                 //Definir acciones del juego
                 accionesJuego(nextX, nextY);
-                boolean isJugador = verificarJugador(nextX, nextY);
 
                 //Hacer movimiento
-                if (!isJugador) {
-                    escenario.celdas[x][y].celdaSelec = false;
-                    escenario.celdas[x][y].setCamino();
-                    y=y-1;                                    //cambio de posicion
-                    escenario.celdas[x][y].celdaSelec = true;
-                    escenario.celdas[x][y].setAdversario();
-                    escenario.celdas[x][y].setIndexSprite(3);
-                    escenario.celdas[x][y].adversario = escenario.celdas[x][y].spritesAdversario[escenario.celdas[x][y].indexSprite];
-                }
+                escenario.celdas[x][y].celdaSelec = false;
+                escenario.celdas[x][y].setCamino();
+                y=y-1;                                    //cambio de posicion
+                escenario.celdas[x][y].celdaSelec = true;
+                escenario.celdas[x][y].setAdversario();
+                escenario.celdas[x][y].setIndexSprite(3);
+                escenario.celdas[x][y].adversario = escenario.celdas[x][y].spritesAdversario[escenario.celdas[x][y].indexSprite];
             }
         }
     }
@@ -51,19 +45,16 @@ public class Adversario implements Constantes {
 
                 //Definir acciones del juego
                 accionesJuego(nextX, nextY);
-                boolean isJugador = verificarJugador(nextX, nextY);
 
                 //Hacer movimiento
-                if (!isJugador) {
-                    escenario.celdas[x][y].celdaSelec = false;
-                    escenario.celdas[x][y].setCamino();
-                    y=y+1;
-                    escenario.celdas[x][y].celdaSelec = true;
-                    escenario.celdas[x][y].setAdversario();
+                escenario.celdas[x][y].celdaSelec = false;
+                escenario.celdas[x][y].setCamino();
+                y=y+1;
+                escenario.celdas[x][y].celdaSelec = true;
+                escenario.celdas[x][y].setAdversario();
 
-                    escenario.celdas[x][y].setIndexSprite(0);
-                    escenario.celdas[x][y].adversario = escenario.celdas[x][y].spritesAdversario[escenario.celdas[x][y].indexSprite];
-                }
+                escenario.celdas[x][y].setIndexSprite(0);
+                escenario.celdas[x][y].adversario = escenario.celdas[x][y].spritesAdversario[escenario.celdas[x][y].indexSprite];
             }
         }
     }
@@ -76,19 +67,16 @@ public class Adversario implements Constantes {
 
                 //Definir acciones del juego
                 accionesJuego(nextX, nextY);
-                boolean isJugador = verificarJugador(nextX, nextY);
 
                 //Hacer movimiento
-                if (!isJugador) {
-                    escenario.celdas[x][y].celdaSelec = false;
-                    escenario.celdas[x][y].setCamino();
-                    x=x-1;
-                    escenario.celdas[x][y].celdaSelec = true;
-                    escenario.celdas[x][y].setAdversario();
+                escenario.celdas[x][y].celdaSelec = false;
+                escenario.celdas[x][y].setCamino();
+                x=x-1;
+                escenario.celdas[x][y].celdaSelec = true;
+                escenario.celdas[x][y].setAdversario();
 
-                    escenario.celdas[x][y].setIndexSprite(1);
-                    escenario.celdas[x][y].adversario = escenario.celdas[x][y].spritesAdversario[escenario.celdas[x][y].indexSprite];
-                }
+                escenario.celdas[x][y].setIndexSprite(1);
+                escenario.celdas[x][y].adversario = escenario.celdas[x][y].spritesAdversario[escenario.celdas[x][y].indexSprite];
             }
         }
     }
@@ -101,28 +89,17 @@ public class Adversario implements Constantes {
 
                 //Definir acciones del juego
                 accionesJuego(nextX, nextY);
-                boolean isJugador = verificarJugador(nextX, nextY);
 
                 //Hacer movimiento
-                if (!isJugador) {
-                    escenario.celdas[x][y].celdaSelec = false;
-                    escenario.celdas[x][y].setCamino();
-                    x=x+1;
-                    escenario.celdas[x][y].celdaSelec = true;
-                    escenario.celdas[x][y].setAdversario();
+                escenario.celdas[x][y].celdaSelec = false;
+                escenario.celdas[x][y].setCamino();
+                x=x+1;
+                escenario.celdas[x][y].celdaSelec = true;
+                escenario.celdas[x][y].setAdversario();
 
-                    escenario.celdas[x][y].setIndexSprite(2);
-                    escenario.celdas[x][y].adversario = escenario.celdas[x][y].spritesAdversario[escenario.celdas[x][y].indexSprite];
-                }
+                escenario.celdas[x][y].setIndexSprite(2);
+                escenario.celdas[x][y].adversario = escenario.celdas[x][y].spritesAdversario[escenario.celdas[x][y].indexSprite];
             }
-        }
-    }
-
-    public boolean verificarJugador (int x, int y) {
-        if (escenario.celdas[x][y].tipo == JUGADOR) {
-            return true;
-        } else {
-            return false;
         }
     }
 
@@ -134,17 +111,14 @@ public class Adversario implements Constantes {
                 escenario.restarCerveza();
 
                 //Eliminamos objetivo consumido
-                //int index = escenario.buscarObjetivo(x, y);
-                //escenario.jugador.inteligencia.destinos.remove(index);
+                int index = escenario.buscarObjetivo(x, y);
+                escenario.jugador.inteligencia.destinos.remove(index);
 
                 System.out.println("Quedan " + escenario.cervezasRestantes + " cervezas.");
                 break;
             case FINAL:
                 //Barney entró en la casa de Homero?!
                 System.out.println("Barney en la casa de Homero?!");
-                break;
-            case JUGADOR:
-                escenario.jugador.sedDeHomero++;
                 break;
             default:
                 break;
@@ -153,7 +127,7 @@ public class Adversario implements Constantes {
 
     public boolean sePuedeAvanzar(int x, int y) {
         if(escenario.celdas[x][y].tipo != OBSTACULO && escenario.celdas[x][y].tipo != ADVERSARIO && escenario.celdas[x][y].tipo != FINAL
-                && escenario.celdas[x][y].tipo != CASA && escenario.celdas[x][y].tipo != OBSTACULO2) {
+                && escenario.celdas[x][y].tipo != CASA && escenario.celdas[x][y].tipo != JUGADOR && escenario.celdas[x][y].tipo != OBSTACULO2) {
             return true;
         }
         return false;
@@ -265,5 +239,12 @@ public class Adversario implements Constantes {
             accionesJuego(x,y);
             escenario.celdas[x][y].tipo = ADVERSARIO;
         }
+    }
+
+    @Override
+    public void run() {
+        if (this.movimientoVertical) moverAdversarioVertical();
+        else moverAdversarioHorizontal();
+        escenario.lienzo.repaint();
     }
 }

@@ -11,7 +11,7 @@ public class Jugador implements Constantes {
         this.x = x;
         this.y = y;
         this.escenario = escenario;
-        this.sedDeHomero = NUMERO_CERVEZAS;
+        this.sedDeHomero = escenario.CANTIDAD_REAL_DUFFS;
         this.inteligencia = new BusquedaAnchura(escenario, this);
     }
 

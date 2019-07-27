@@ -29,8 +29,14 @@ public class Lienzo extends Canvas implements Constantes {
     public Thread hilo;
     public Timer lanzadorAdversariosIA;
 
+    public static boolean hardMode;
+    public static boolean playerIA;
+    private boolean exit;
 
-    public Lienzo(VentanaJuego ventanaJuego, JFrame ventanaMenu) {
+    public Lienzo(VentanaJuego ventanaJuego, JFrame ventanaMenu, boolean hardMode, boolean playerIA) {
+        this.hardMode = hardMode;
+        this.playerIA = playerIA;
+
         try {
             fondo = ImageIO.read(new File("images/fondo.png"));
             fondo = fondo.getScaledInstance(getAncho(), getLargo(), Image.SCALE_SMOOTH);
@@ -64,14 +70,21 @@ public class Lienzo extends Canvas implements Constantes {
                 repaint();
             }
         });
+        exit = false;
         hilo = new Thread(() -> {
-            while (true) {
+            while (!exit) {
                 synchronized (this) {
                     if (escenario.cervezasRestantes == 0 && escenario.jugador.getSedDeHomero() != 0) {
                         escenario.restablecerDuffs();
                     }
+                    if (escenario.jugador.getSedDeHomero() > 20) {
+                        escenario.detenerJuego();
+                        JOptionPane.showMessageDialog(null, "PERDEDOR! -demonios Barney! me las vas a pagar...- pensó Homero");
+                        exit = true;
+                    }
                 }
             }
+            System.out.println("Finalizando --------------------");
         });
         hilo.start();
 
@@ -79,16 +92,22 @@ public class Lienzo extends Canvas implements Constantes {
         escenario.reloj = new Reloj(this.escenario);
         escenario.relojTiempoJuego = new Timer();
         escenario.relojTiempoJuego.scheduleAtFixedRate(escenario.reloj, 0, 1000);
+        if (hardMode) escenario.reloj.setHardTime();
 
+        int period;
+        if (hardMode && playerIA) period = 1000;
+        else if (hardMode) period = 500;
+        else period = 1500;
         //Vida a los adversarios (sin inteligencia)
         lanzadorAdversariosIA = new Timer();
-        int period = 1000;
-        for(int i=0; i<NUMERO_ADVERSARIOS; i++) {
-            lanzadorAdversariosIA.scheduleAtFixedRate(escenario.adversarios[i], 0, period + 100*i);
+        for(int i=0; i<escenario.CANTIDAD_REAL_ADVERSARIOS; i++) {
+            lanzadorAdversariosIA.scheduleAtFixedRate(escenario.adversarios[i].inteligencia, 1000, period);
         }
-        //Jugador con inteligencia
-        lanzadorJugadorIA = new Timer();
-        lanzadorJugadorIA.scheduleAtFixedRate(escenario.jugador.inteligencia,1000,500);
+        if (playerIA) {
+            //Jugador con inteligencia
+            lanzadorJugadorIA = new Timer();
+            lanzadorJugadorIA.scheduleAtFixedRate(escenario.jugador.inteligencia,1000,700);
+        }
     }
 
     /*
@@ -134,25 +153,25 @@ public class Lienzo extends Canvas implements Constantes {
         switch(evento.getKeyCode()) {
             case KeyEvent.VK_UP:
                 //Movimiento del adversario en reacción al jugador
-                escenario.adversarios[randomValue(0, NUMERO_ADVERSARIOS-1)].moverCeldaArriba();
+                //escenario.adversarios[randomValue(0, NUMERO_ADVERSARIOS-1)].moverCeldaArriba();
                 //Movimiento jugador
                 escenario.jugador.moverCeldaArriba();
                 break;
             case KeyEvent.VK_DOWN:
                 //Movimiento del adversario en reacción al jugador
-                escenario.adversarios[randomValue(0, NUMERO_ADVERSARIOS-1)].moverCeldaAbajo();
+                //escenario.adversarios[randomValue(0, NUMERO_ADVERSARIOS-1)].moverCeldaAbajo();
                 //Movimiento jugador
                 escenario.jugador.moverCeldaAbajo();
                 break;
             case KeyEvent.VK_LEFT:
                 //Movimiento del adversario en reacción al jugador
-                escenario.adversarios[randomValue(0, NUMERO_ADVERSARIOS-1)].moverCeldaIzquierda();
+                //escenario.adversarios[randomValue(0, NUMERO_ADVERSARIOS-1)].moverCeldaIzquierda();
                 //Movimiento jugador
                 escenario.jugador.moverCeldaIzquierda();
                 break;
             case KeyEvent.VK_RIGHT:
                 //Movimiento del adversario en reacción al jugador
-                escenario.adversarios[randomValue(0, NUMERO_ADVERSARIOS-1)].moverCeldaDerecha();
+                //escenario.adversarios[randomValue(0, NUMERO_ADVERSARIOS-1)].moverCeldaDerecha();
                 //Movimiento jugador
                 escenario.jugador.moverCeldaDerecha();
                 break;

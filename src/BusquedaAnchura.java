@@ -19,7 +19,7 @@ public class BusquedaAnchura extends TimerTask implements Constantes {
     public Estado temp;
     public boolean exito;
     public int intentosRep;
-    public static int MAX_REP = 15;
+    public static int MAX_REP = 10;
 
     public BusquedaAnchura(Escenario escenario, Jugador jugador) {
 

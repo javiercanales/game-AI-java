@@ -101,12 +101,14 @@ public class Lienzo extends Canvas implements Constantes {
         //Vida a los adversarios (sin inteligencia)
         lanzadorAdversariosIA = new Timer();
         for(int i=0; i<escenario.CANTIDAD_REAL_ADVERSARIOS; i++) {
-            lanzadorAdversariosIA.scheduleAtFixedRate(escenario.adversarios[i].inteligencia, 1000, period);
+            lanzadorAdversariosIA.scheduleAtFixedRate(escenario.adversarios[i].inteligencia, 500, period);
         }
         if (playerIA) {
             //Jugador con inteligencia
             lanzadorJugadorIA = new Timer();
-            lanzadorJugadorIA.scheduleAtFixedRate(escenario.jugador.inteligencia,1000,700);
+            if (hardMode) lanzadorJugadorIA.scheduleAtFixedRate(escenario.jugador.inteligencia,200,800);
+            else lanzadorJugadorIA.scheduleAtFixedRate(escenario.jugador.inteligencia,200,500);
+
         }
     }
 

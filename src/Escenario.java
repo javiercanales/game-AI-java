@@ -84,6 +84,8 @@ public class Escenario extends JComponent implements Constantes {
             CANTIDAD_REAL_DUFFS = CANTIDAD_REAL_DUFFS *2;
             if (!lienzo.playerIA) {
                 CANTIDAD_REAL_ADVERSARIOS = CANTIDAD_REAL_ADVERSARIOS*3;
+            } else {
+                CANTIDAD_REAL_ADVERSARIOS+=2;
             }
         }
     }

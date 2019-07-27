@@ -144,7 +144,12 @@ public class Adversario implements Constantes {
                 System.out.println("Barney en la casa de Homero?!");
                 break;
             case JUGADOR:
-                escenario.jugador.sedDeHomero++;
+                if (escenario.cervezasRestantes == 0 || escenario.jugador.getSedDeHomero() == 0) {
+                    escenario.detenerJuego();
+                    JOptionPane.showMessageDialog(null, "PERDEDOR! -demonios Barney! me las vas a pagar...- pensó Homero");
+                } else {
+                    escenario.jugador.sedDeHomero++;
+                }
                 break;
             default:
                 break;

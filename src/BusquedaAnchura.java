@@ -228,7 +228,8 @@ public class BusquedaAnchura extends TimerTask implements Constantes {
         intentosRep = 0;
 
         if(escenario.jugador.getSedDeHomero() == 0) {       //Logrado, debe buscar el final
-            do { //el estado inicial es donde estoy
+            do {
+                //el estado inicial es donde estoy
                 subinicial=new Estado(jugador.x,jugador.y,'N',null);
                 //el estado final del juego
                 subobjetivo=destinoFinal;
@@ -251,14 +252,14 @@ public class BusquedaAnchura extends TimerTask implements Constantes {
                 }
             } while ( !resultado );
         } else {
-            do { //el estado inicial es donde estoy
+            do {
+                //el estado inicial es donde estoy
                 subinicial=new Estado(jugador.x,jugador.y,'N',null);
                 //el estado final es a donde quiero ir
                 //subobjetivo = destinos.get(0);
                 //el estado final es a donde quiero ir
                 if (destinos.isEmpty()) {
-                    resultado = false;
-                    continue;
+                    return;
                 } else {
                     subobjetivo = buscarMejorDestino(subinicial, index);
                 }

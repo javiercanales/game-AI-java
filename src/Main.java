@@ -9,7 +9,9 @@ import java.io.IOException;
 public class Main {
     
     public static void main (String[]args) {
-
+        /**
+         * Aqui se diseña el menú de opciones del juego.
+         */
         int ancho, largo;
         final Image fondoMenu;
         Image fondo;

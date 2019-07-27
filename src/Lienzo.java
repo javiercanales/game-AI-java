@@ -55,7 +55,7 @@ public class Lienzo extends Canvas implements Constantes {
         this.setFocusable(true);
 
         //Escuchador de eventos de teclado
-        addKeyListener(new KeyAdapter() {
+        this.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent evt) {
                 moverCelda(evt);
@@ -63,7 +63,7 @@ public class Lienzo extends Canvas implements Constantes {
             }
         });
         //Escuchador de eventos de mouse
-        addMouseListener(new MouseAdapter() {
+        this.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent evt) {
                 activarCelda(evt);

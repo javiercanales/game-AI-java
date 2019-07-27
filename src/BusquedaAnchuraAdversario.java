@@ -164,9 +164,7 @@ public class BusquedaAnchuraAdversario extends TimerTask implements Constantes {
     }
 
     public char darMovimiento() {
-
         return pasos.get(index_pasos-1);
-
     }
 
     //distancia entre estados/celdas
@@ -222,7 +220,8 @@ public class BusquedaAnchuraAdversario extends TimerTask implements Constantes {
         intentosRep = 0;
 
         if(escenario.jugador.getSedDeHomero() == 0) {       //Logrado, debe buscar el final
-            do { //el estado inicial es donde estoy
+            do {
+                //el estado inicial es donde estoy
                 subinicial = new Estado(adversario.x, adversario.y,'N',null);
                 //a buscar a Homero antes que llegue a casa!
                 subobjetivo = new Estado(escenario.jugador.x, escenario.jugador.y, 'N', null);
@@ -241,17 +240,16 @@ public class BusquedaAnchuraAdversario extends TimerTask implements Constantes {
                 }
             } while ( !resultado );
         } else {
-            do { //el estado inicial es donde estoy
+            do {
+                //el estado inicial es donde estoy
                 subinicial = new Estado(adversario.x, adversario.y,'N',null);
 
                 //el estado final es a donde quiero ir
                 if (destinos.isEmpty()) {
-                    resultado = false;
-                    continue;
+                    return;
                 } else {
                     subobjetivo = destinos.get(index);
                 }
-
                 //subobjetivo = buscarMejorDestino(subinicial);
 
                 System.out.println("Busqueda de adversario en (" + subinicial.x + "," + subinicial.y + ")");

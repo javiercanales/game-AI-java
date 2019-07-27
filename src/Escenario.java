@@ -97,6 +97,9 @@ public class Escenario extends JComponent implements Constantes {
 
         nuevaSed = CANTIDAD_REAL_DUFFS /2 + jugador.getSedDeHomero();
         if(nuevaSed > CANTIDAD_REAL_DUFFS) nuevaSed = CANTIDAD_REAL_DUFFS;
+
+        if(lienzo.hardMode) nuevaSed = (2*nuevaSed/3);
+
         cervezasRestantes = CANTIDAD_REAL_DUFFS;
         jugador.setSedDeHomero(nuevaSed);
         reloj.setTiempoExtra();

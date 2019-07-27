@@ -11,7 +11,10 @@ public class Jugador implements Constantes {
         this.x = x;
         this.y = y;
         this.escenario = escenario;
-        this.sedDeHomero = escenario.CANTIDAD_REAL_DUFFS;
+
+        if (escenario.lienzo.hardMode) this.sedDeHomero = 2*escenario.CANTIDAD_REAL_DUFFS/3;
+        else this.sedDeHomero = escenario.CANTIDAD_REAL_DUFFS;
+
         this.inteligencia = new BusquedaAnchura(escenario, this);
     }
 
@@ -156,6 +159,10 @@ public class Jugador implements Constantes {
                 escenario.restarCerveza();
                 System.out.println("Se tomó una. Le faltan beber " + sedDeHomero + " cervezas.");
                 System.out.println("Quedan " + escenario.cervezasRestantes + " cervezas.");
+
+                if (!escenario.lienzo.playerIA) {   //jugador sin IA, necesita actualizarlo acá
+                    escenario.informarCambio( new Estado(x, y, 'N', null) );
+                }
                 break;
             case FINAL:
                 //Final. Se informa sedDeHomero y se termina la partida.

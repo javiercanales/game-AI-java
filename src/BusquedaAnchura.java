@@ -19,6 +19,7 @@ public class BusquedaAnchura extends TimerTask implements Constantes {
     public Estado temp;
     public boolean exito;
     public int intentosRep;
+    public static int MAX_REP = 15;
 
     public BusquedaAnchura(Escenario escenario, Jugador jugador) {
 
@@ -237,10 +238,10 @@ public class BusquedaAnchura extends TimerTask implements Constantes {
                 //busco ruta
                 resultado=this.buscar(subinicial,subobjetivo);
 
-                if ( !subinicial.equals(subobjetivo) && !resultado && intentosRep < 20 ) {
+                if ( !subinicial.equals(subobjetivo) && !resultado && intentosRep < MAX_REP ) {
                     System.out.println("Aqui jugador a FINAL --------------- intentos repetitivos: " + intentosRep);
                     intentosRep++;
-                } else if ( intentosRep >= 20 ) {
+                } else if ( intentosRep >= MAX_REP ) {
                     System.out.println("Aca jugador en FINAL se pasó --------------------------------------------------");
                     return;
                 }
@@ -269,11 +270,11 @@ public class BusquedaAnchura extends TimerTask implements Constantes {
                 if ( subinicial.equals(subobjetivo) )
                     escenario.informarCambio(subobjetivo);
                 else {
-                    if ( !resultado && intentosRep < 20) {
+                    if ( !resultado && intentosRep < MAX_REP) {
                         intentosRep++;
                         index = avanzarIndice(index);
                         System.out.println("Aqui jugador --------------- intentos repetitivos: " + intentosRep);
-                    } else if ( intentosRep >= 20) {
+                    } else if ( intentosRep >= MAX_REP) {
                         System.out.println("Aca jugador se pasó");
                         return;
                     }

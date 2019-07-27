@@ -18,6 +18,7 @@ public class BusquedaAnchuraAdversario extends TimerTask implements Constantes {
     public Estado temp;
     public boolean exito;
     public int intentosRep;
+    public static int MAX_REP = 15;
 
     public BusquedaAnchuraAdversario(Escenario escenario, Adversario adversario) {
 
@@ -231,10 +232,10 @@ public class BusquedaAnchuraAdversario extends TimerTask implements Constantes {
                 //busco ruta
                 resultado = this.buscar(subinicial,subobjetivo);
 
-                if ( !subinicial.equals(subobjetivo) && !resultado && intentosRep < 20 ) {
+                if ( !subinicial.equals(subobjetivo) && !resultado && intentosRep < MAX_REP ) {
                     System.out.println("Aqui adversario --------------- intentos repetitivos: " + intentosRep);
                     intentosRep++;
-                } else if ( intentosRep >= 20 ) {
+                } else if ( intentosRep >= MAX_REP ) {
                     System.out.println("Aca adversario se pasó --------------------------------------------------");
                     return;
                 }
@@ -260,11 +261,11 @@ public class BusquedaAnchuraAdversario extends TimerTask implements Constantes {
                 if ( subinicial.equals(subobjetivo) )
                     escenario.informarCambio(subobjetivo);
                 else {
-                    if ( !resultado && intentosRep < 20 ) {
+                    if ( !resultado && intentosRep < MAX_REP ) {
                         index = avanzarIndice(index);
                         System.out.println("Aqui adversario --------------- intentos repetitivos: " + intentosRep);
                         intentosRep++;
-                    } else if ( intentosRep >= 20 ) {
+                    } else if ( intentosRep >= MAX_REP ) {
                         System.out.println("Aca adversario se pasó --------------------------------------------------");
                         return;
                     }

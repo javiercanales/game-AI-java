@@ -1,7 +1,7 @@
 /**
  * Estructura de Datos dinámica para controlar el estado del jugador y de las posiciones previas.
  */
-public class Estado implements Comparable{
+public class Estado {    //implements Comparable{
     //posicion x e y de la entidad
     public int x;
     public int y;
@@ -32,6 +32,7 @@ public class Estado implements Comparable{
     public String toString() {
         return "("+x+","+y+"): Prioridad = " + this.prioridad;
     }
+    /*
     @Override
     public int compareTo(Object o) {
         Estado e = (Estado) o;
@@ -42,4 +43,5 @@ public class Estado implements Comparable{
             else return -1;
         }
     }
+    */
 }

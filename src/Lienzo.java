@@ -84,7 +84,7 @@ public class Lienzo extends Canvas implements Constantes {
                     }
                 }
             }
-            System.out.println("Finalizando --------------------");
+            System.out.println("Finalizando hilo --------------------");
         });
         hilo.start();
 
@@ -95,19 +95,19 @@ public class Lienzo extends Canvas implements Constantes {
         if (hardMode) escenario.reloj.setHardTime();
 
         int period;
-        if (hardMode && playerIA) period = 1000;
+        if (hardMode && playerIA) period = 900;
         else if (hardMode) period = 500;
-        else period = 1500;
-        //Vida a los adversarios (sin inteligencia)
+        else period = 1200;
+        //Vida a los adversarios, con inteligencia
         lanzadorAdversariosIA = new Timer();
         for(int i=0; i<escenario.CANTIDAD_REAL_ADVERSARIOS; i++) {
-            lanzadorAdversariosIA.scheduleAtFixedRate(escenario.adversarios[i].inteligencia, 500, period);
+            lanzadorAdversariosIA.scheduleAtFixedRate(escenario.adversarios[i].inteligencia, 200, period);
         }
         if (playerIA) {
             //Jugador con inteligencia
             lanzadorJugadorIA = new Timer();
-            if (hardMode) lanzadorJugadorIA.scheduleAtFixedRate(escenario.jugador.inteligencia,200,800);
-            else lanzadorJugadorIA.scheduleAtFixedRate(escenario.jugador.inteligencia,200,500);
+            if (hardMode) lanzadorJugadorIA.scheduleAtFixedRate(escenario.jugador.inteligencia,200,700);
+            else lanzadorJugadorIA.scheduleAtFixedRate(escenario.jugador.inteligencia,200,400);
 
         }
     }

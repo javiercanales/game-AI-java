@@ -47,6 +47,9 @@ public class Jugador implements Constantes {
                 escenario.celdas[x][y].setIndexSprite(3);
                 escenario.celdas[x][y].jugador = escenario.celdas[x][y].sprites[escenario.celdas[x][y].getIndexSprite()];
             }
+            if (escenario.celdas[x][y-1].tipo == ADVERSARIO) {
+                sedDeHomero++;
+            }
         }
     }
 
@@ -71,6 +74,9 @@ public class Jugador implements Constantes {
                 escenario.celdas[x][y].setJugador();
                 escenario.celdas[x][y].setIndexSprite(0);
                 escenario.celdas[x][y].jugador = escenario.celdas[x][y].sprites[escenario.celdas[x][y].getIndexSprite()];
+            }
+            if (escenario.celdas[x][y+1].tipo == ADVERSARIO) {
+                sedDeHomero++;
             }
         }
     }
@@ -97,6 +103,9 @@ public class Jugador implements Constantes {
                 escenario.celdas[x][y].setIndexSprite(1);
                 escenario.celdas[x][y].jugador = escenario.celdas[x][y].sprites[escenario.celdas[x][y].getIndexSprite()];
             }
+            if (escenario.celdas[x-1][y].tipo == ADVERSARIO) {
+                sedDeHomero++;
+            }
         }
     }
 
@@ -122,7 +131,9 @@ public class Jugador implements Constantes {
                 escenario.celdas[x][y].setIndexSprite(2);
                 escenario.celdas[x][y].jugador = escenario.celdas[x][y].sprites[escenario.celdas[x][y].getIndexSprite()];
             }
-
+            if (escenario.celdas[x+1][y].tipo == ADVERSARIO) {
+                sedDeHomero++;
+            }
         }
     }
 

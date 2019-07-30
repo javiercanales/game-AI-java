@@ -79,6 +79,7 @@ public class Escenario extends JComponent implements Constantes {
         }
         nubecita = nubecita.getScaledInstance(18, 20, Image.SCALE_DEFAULT);
     }
+
     public void analizarModoInicio() {
         if (lienzo.hardMode) {
             CANTIDAD_REAL_DUFFS = CANTIDAD_REAL_DUFFS *2;

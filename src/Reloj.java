@@ -5,13 +5,13 @@ public class Reloj extends TimerTask implements Constantes {
     public Escenario escenario;
     public int minutos = 0;
     public int segundos = 45;
-    public int extraSegs = 12;
+    public int extraSegs = 10;
 
     public Reloj(Escenario escenario) {
         this.escenario = escenario;
     }
 
-    public void setTiempoExtra(){
+    public void setTiempoExtra() {
         if(segundos + extraSegs >= 60) {
             minutos++;
             segundos = segundos + extraSegs - 60;
@@ -22,7 +22,7 @@ public class Reloj extends TimerTask implements Constantes {
     public void setHardTime() {
         minutos = 0;
         segundos = 50;
-        extraSegs = 10;
+        extraSegs = 5;
     }
     @Override
     public void run() {

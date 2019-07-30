@@ -24,11 +24,6 @@ public interface Constantes {
     public final int ANCHO_BORDE_VENTANA=30;
     public final int LARGO_BORDE_VENTANA=50;
 
-    public final int anchuraCelda=64;
-    public final int alturaCelda=64;
-    public final int anchuraMundoVirtual=10;
-    public final int alturaMundoVirtual=7;
-
     public final char JUGADOR='J';
     public final char CAMINO='C';
     public final char OBSTACULO='O';

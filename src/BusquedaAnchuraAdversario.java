@@ -148,6 +148,13 @@ public class BusquedaAnchuraAdversario extends TimerTask implements Constantes {
     public boolean sePuedeAvanzar(int x, int y) {
         if(escenario.celdas[x][y].tipo != OBSTACULO && escenario.celdas[x][y].tipo != ADVERSARIO
                 && escenario.celdas[x][y].tipo != CASA && escenario.celdas[x][y].tipo != OBSTACULO2) {
+            if (!escenario.lienzo.buscarJugador) {
+                if (escenario.celdas[x][y].tipo != JUGADOR) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
             return true;
         }
         return false;

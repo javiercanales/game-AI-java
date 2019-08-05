@@ -33,9 +33,14 @@ public class Lienzo extends Canvas implements Constantes {
     public static boolean playerIA;
     private boolean exit;
 
+
+    public boolean buscarJugador;
+
     public Lienzo(VentanaJuego ventanaJuego, JFrame ventanaMenu, boolean hardMode, boolean playerIA) {
         this.hardMode = hardMode;
         this.playerIA = playerIA;
+
+        buscarJugador = false;
 
         try {
             fondo = ImageIO.read(new File("images/fondo-10.jpg"));
@@ -76,6 +81,9 @@ public class Lienzo extends Canvas implements Constantes {
                 synchronized (this) {
                     if (escenario.cervezasRestantes == 0 && escenario.jugador.getSedDeHomero() != 0) {
                         escenario.restablecerDuffs();
+                    }
+                    if (escenario.jugador.getSedDeHomero() == 0) {
+                        buscarJugador = true;
                     }
                     if (escenario.jugador.getSedDeHomero() > 20) {
                         escenario.detenerJuego();

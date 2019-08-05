@@ -152,8 +152,10 @@ public class Jugador implements Constantes {
                 //Definir recompensa.
                 if (sedDeHomero > 0) {
                     sedDeHomero--;
-                } else if (sedDeHomero == 0) {
+                } else if (sedDeHomero == 0) { //no tenia sed, pero volvio a tomar... uff
                     sedDeHomero++;
+                    escenario.lienzo.buscarJugador = false;
+
                 }
                 escenario.restarCerveza();
                 System.out.println("Se tomó una. Le faltan beber " + sedDeHomero + " cervezas.");

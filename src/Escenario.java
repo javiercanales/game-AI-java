@@ -96,7 +96,6 @@ public class Escenario extends JComponent implements Constantes {
         for(int i = 0; i< CANTIDAD_REAL_DUFFS; i++) {
             establecerRecompensas();
         }
-        jugador.inteligencia.destinos = destinos; //nuevos destinos
 
         nuevaSed = CANTIDAD_REAL_DUFFS /2 + jugador.getSedDeHomero();
         if(nuevaSed > CANTIDAD_REAL_DUFFS) nuevaSed = CANTIDAD_REAL_DUFFS;
@@ -171,13 +170,16 @@ public class Escenario extends JComponent implements Constantes {
         //y que no sean obstaculos
         int restriccionCasa = establecerFinal();
 
-        //Posiciones obstaculos
+        //Posiciones arbolitos de springfield
         for (int i=0; i<NUMERO_OBSTACULOS; i++) {
             establecerObstaculo(restriccionCasa);
         }
-        //Posiciones obstaculos 2 (bar de moe)
+        //Posiciones obstaculos 2 (lugares icónicos de springfield)
+        int index = 0; //para controlar el lugar icónico a dibujar
         for (int i=0; i<NUMERO_OBSTACULOS_2; i++) {
-            establecerObstaculo2(restriccionCasa);
+            establecerObstaculo2(restriccionCasa, index);
+            index++;
+            if (index == 6) index = 0; //reseteo
         }
 
         //Posiciones adversarios
@@ -227,7 +229,7 @@ public class Escenario extends JComponent implements Constantes {
             establecerObstaculo(restriccionY);
         }
     }
-    private void establecerObstaculo2(int restriccionY) {
+    private void establecerObstaculo2(int restriccionY, int index) {
         int x,y;
         x = randomValue(0, NUMERO_CELDAS_ANCHO-1);
         y = randomValue(0, NUMERO_CELDAS_LARGO-1);
@@ -235,11 +237,11 @@ public class Escenario extends JComponent implements Constantes {
 
         if (celdas[x][y].isDisponible() && y != restriccionY && !puntosCeldaRestriccionObstaculo.contains(puntoPrueba)) {
             //Se define un obstaculo
-            celdas[x][y].setObstaculo2();
+            celdas[x][y].setObstaculo2(index);
             agregarRestricciones(x,y);
         }
         else {
-            establecerObstaculo2(restriccionY);
+            establecerObstaculo2(restriccionY, index);
         }
     }
 
@@ -319,14 +321,12 @@ public class Escenario extends JComponent implements Constantes {
 
         lienzo.ventanaJuego.setVisible(false);
         lienzo.ventanaMenu.setVisible(true);
+        System.gc();
         System.out.println("El juego se ha detenido correctamente --------------------------------------");
     }
 
     public void informarCambio(Estado estado) {
-        jugador.inteligencia.destinos.remove(estado);
-        for (Adversario adversario: adversarios) {
-            adversario.inteligencia.destinos.remove(estado);
-        }
+        destinos.remove(estado);    //la referencia funciona para todos los agentes IA
     }
 
     public void moverAdversario() {

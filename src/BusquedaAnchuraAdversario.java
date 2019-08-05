@@ -219,7 +219,7 @@ public class BusquedaAnchuraAdversario extends TimerTask implements Constantes {
         int index = 0;
         intentosRep = 0;
 
-        if(escenario.jugador.getSedDeHomero() == 0) {       //Logrado, debe buscar el final
+        if(escenario.jugador.getSedDeHomero() == 0) {       //Hay que buscar a homero
             do {
                 //el estado inicial es donde estoy
                 subinicial = new Estado(adversario.x, adversario.y,'N',null);

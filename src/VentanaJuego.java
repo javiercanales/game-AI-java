@@ -30,7 +30,6 @@ public class VentanaJuego extends JFrame implements Constantes {
             @Override
             public void windowClosed(WindowEvent e) {
                 super.windowClosing(e);
-
             }
         });
 

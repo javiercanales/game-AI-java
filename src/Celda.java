@@ -11,8 +11,10 @@ public class Celda extends JComponent implements Constantes {
     public int y;
     public char tipo;
     public boolean celdaSelec;
+    public int indiceObstaculo2;
 
-    public BufferedImage jugador, obstaculo, obstaculo2, adversario, recompensa, casa;
+    public BufferedImage jugador, obstaculo, obstaculo20, obstaculo21, obstaculo22,
+            obstaculo23, obstaculo24, obstaculo25, adversario, recompensa, casa;
 
     public int indexSprite;
     public BufferedImage sprites[], imagenSprites, imagenSpritesAdversario, spritesAdversario[];
@@ -29,7 +31,12 @@ public class Celda extends JComponent implements Constantes {
         try {
             jugador = ImageIO.read(new File("images/jugador.png"));
             obstaculo = ImageIO.read(new File("images/obstaculo.png"));
-            obstaculo2 = ImageIO.read(new File("images/obstaculo-2.png"));
+            obstaculo20 = ImageIO.read(new File("images/obstaculo-2.png"));
+            obstaculo21 = ImageIO.read(new File("images/obstaculo-3.png"));
+            obstaculo22 = ImageIO.read(new File("images/obstaculo-4.png"));
+            obstaculo23 = ImageIO.read(new File("images/obstaculo-5.png"));
+            obstaculo24 = ImageIO.read(new File("images/obstaculo-6.png"));
+            obstaculo25 = ImageIO.read(new File("images/obstaculo-7.png"));
             adversario = ImageIO.read(new File("images/adversario.png"));
             recompensa = ImageIO.read(new File("images/recompensa.png"));
             casa = ImageIO.read(new File("images/casa.png"));
@@ -71,8 +78,9 @@ public class Celda extends JComponent implements Constantes {
     public void setObstaculo() {
         tipo=OBSTACULO;
     }
-    public void setObstaculo2() {
+    public void setObstaculo2(int index) {
         tipo=OBSTACULO2;
+        indiceObstaculo2 = index;
     }
     public void setAdversario() {
         tipo=ADVERSARIO;
@@ -102,7 +110,26 @@ public class Celda extends JComponent implements Constantes {
                 g.drawImage(obstaculo,x,y,null);
                 break;
             case OBSTACULO2:
-                g.drawImage(obstaculo2,x,y,null);
+                switch (indiceObstaculo2) {
+                    case 0:
+                        g.drawImage(obstaculo20,x,y,null);
+                        break;
+                    case 1:
+                        g.drawImage(obstaculo21,x,y,null);
+                        break;
+                    case 2:
+                        g.drawImage(obstaculo22,x,y,null);
+                        break;
+                    case 3:
+                        g.drawImage(obstaculo23,x,y,null);
+                        break;
+                    case 4:
+                        g.drawImage(obstaculo24,x,y,null);
+                        break;
+                    case 5:
+                        g.drawImage(obstaculo25,x,y,null);
+                        break;
+                }
                 break;
             case RECOMPENSA:
                 g.drawImage(recompensa,x,y,null);

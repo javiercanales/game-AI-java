@@ -38,7 +38,7 @@ public class Lienzo extends Canvas implements Constantes {
         this.playerIA = playerIA;
 
         try {
-            fondo = ImageIO.read(new File("images/fondo.png"));
+            fondo = ImageIO.read(new File("images/fondo-10.jpg"));
             fondo = fondo.getScaledInstance(getAncho(), getLargo(), Image.SCALE_SMOOTH);
             System.out.println("Leido ---------------------");
         } catch (IOException error) {
@@ -107,7 +107,7 @@ public class Lienzo extends Canvas implements Constantes {
             //Jugador con inteligencia
             lanzadorJugadorIA = new Timer();
             if (hardMode) lanzadorJugadorIA.scheduleAtFixedRate(escenario.jugador.inteligencia,200,700);
-            else lanzadorJugadorIA.scheduleAtFixedRate(escenario.jugador.inteligencia,200,400);
+            else lanzadorJugadorIA.scheduleAtFixedRate(escenario.jugador.inteligencia,300,350);
 
         }
     }
